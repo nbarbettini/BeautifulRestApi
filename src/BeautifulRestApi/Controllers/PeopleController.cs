@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BeautifulRestApi.Dal;
-using BeautifulRestApi.Models;
-using BeautifulRestApi.Services;
+﻿using BeautifulRestApi.Dal;
+using BeautifulRestApi.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautifulRestApi.Controllers
@@ -12,24 +7,20 @@ namespace BeautifulRestApi.Controllers
     [Route("api/[controller]")]
     public class PeopleController : Controller
     {
-        private readonly IPeopleService _peopleService;
+        private readonly BeautifulContext _context;
 
-        public PeopleController(IPeopleService peopleService)
+        public PeopleController(BeautifulContext context)
         {
-            _peopleService = peopleService;
+            _context = context;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return new ObjectResult(_peopleService.GetAll());
-        }
+            var getAllQuery = new PeopleGetAllQuery(_context);
 
-        //[HttpGet("all")]
-        //public IActionResult GetAll()
-        //{
-        //    return new ObjectResult(new Collection<PersonResponse>("https://example.io/users", _people));
-        //}
+            return new ObjectResult(getAllQuery.Execute());
+        }
     }
 }
 
