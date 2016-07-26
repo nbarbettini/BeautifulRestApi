@@ -11,14 +11,14 @@ namespace BeautifulRestApi
         private static readonly Dal.DbModels.Person[] PeopleData = {
             new Dal.DbModels.Person
             {
-                Href = "https://example.io/people/1",
+                Id = "1abc",
                 FirstName = "Bob",
                 LastName = "Smith",
                 BirthDate = new DateTimeOffset(1985, 6, 12, 15, 00, 00, TimeSpan.Zero)
             },
             new Dal.DbModels.Person
             {
-                Href = "https://example.io/people/2",
+                Id = "2def",
                 FirstName = "Jane",
                 LastName = "Smith",
                 BirthDate = new DateTimeOffset(1989, 1, 22, 3, 00, 00, TimeSpan.Zero)

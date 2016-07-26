@@ -1,21 +1,24 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
 
 namespace BeautifulRestApi.Queries
 {
-    public class PeopleGetAllQuery : QueryBase<PersonResponse>
+    public class PeopleGetAllQuery : QueryBase<CollectionResponse<PersonResponse>>
     {
         public PeopleGetAllQuery(BeautifulContext context)
             : base(context)
         {
         }
 
-        public override PersonResponse[] Execute()
+        public CollectionResponse<PersonResponse> Execute(string baseHref)
         {
-            return Context.People
-                .Select(src => new PersonResponse(src.Href, src.FirstName, src.LastName, src.BirthDate))
+            var items = Context.People
+                .Select(src => new PersonResponse(ConstructResourceHref(baseHref, "people", src.Id), src.FirstName, src.LastName, src.BirthDate))
                 .ToArray();
+
+            return new CollectionResponse<PersonResponse>(baseHref, items);
         }
     }
 }

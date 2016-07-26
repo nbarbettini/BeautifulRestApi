@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 
 namespace BeautifulRestApi.Models
 {
-    public class Collection<T> : Resource
+    public class CollectionResponse<T> : Resource
     {
-        public Collection(string collectionhref, IEnumerable<T> items)
+        public CollectionResponse(string collectionhref, IEnumerable<T> items)
             : base(collectionhref)
         {
             Meta.Relations = new[] {"collection"};
