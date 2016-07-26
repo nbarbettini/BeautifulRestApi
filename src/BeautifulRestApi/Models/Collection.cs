@@ -9,12 +9,11 @@ namespace BeautifulRestApi.Models
 {
     public class Collection<T> : Resource
     {
-        public Collection()
+        public Collection(string collectionhref, IEnumerable<T> items)
+            : base(collectionhref)
         {
-            Meta = new Metadata
-            {
-                Relations = new[] {"collection"}
-            };
+            Meta.Relations = new[] {"collection"};
+            Items = items.ToArray();
         }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
