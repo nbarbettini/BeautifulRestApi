@@ -6,14 +6,14 @@ namespace BeautifulRestApi.Models
 {
     public class CollectionResponse<T> : Resource
     {
-        public CollectionResponse(string collectionhref, IEnumerable<T> items)
-            : base(collectionhref)
+        public CollectionResponse(string collectionHref, IEnumerable<T> items)
+            : base(collectionHref)
         {
             Meta.Relations = new[] {"collection"};
             Items = items.ToArray();
         }
 
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public T[] Items { get; set; }
     }
 }

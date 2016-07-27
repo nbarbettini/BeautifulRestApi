@@ -7,11 +7,11 @@ using BeautifulRestApi.Models;
 
 namespace BeautifulRestApi.Queries
 {
-    public class PeopleGetQuery : QueryBase<PersonResponse>
+    public class GetPersonQuery : QueryBase
     {
         private readonly string _baseHref;
 
-        public PeopleGetQuery(BeautifulContext context, string baseHref)
+        public GetPersonQuery(BeautifulContext context, string baseHref)
             : base(context)
         {
             _baseHref = baseHref;
@@ -23,11 +23,7 @@ namespace BeautifulRestApi.Queries
 
             return p == null
                 ? null
-                : new PersonResponse(
-                    ConstructResourceHref(_baseHref, "people", p.Id),
-                    p.FirstName,
-                    p.LastName,
-                    p.BirthDate);
+                : new PersonResponse(UrlHelper.Construct(_baseHref, p.Id), p.FirstName, p.LastName, p.BirthDate);
         }
     }
 }

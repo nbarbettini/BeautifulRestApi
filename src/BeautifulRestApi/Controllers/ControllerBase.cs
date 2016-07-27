@@ -13,7 +13,7 @@ namespace BeautifulRestApi.Controllers
             DataContext = context;
         }
 
-        protected string BaseHref => new UriBuilder()
+        protected string RootHref => new UriBuilder()
         {
             Scheme = Request.Scheme,
             Host = Request.Host.Host,

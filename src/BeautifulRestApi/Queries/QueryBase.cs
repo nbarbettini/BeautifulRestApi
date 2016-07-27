@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq;
 using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
 
 namespace BeautifulRestApi.Queries
 {
-    public abstract class QueryBase<T>
-        where T : Resource
+    public abstract class QueryBase
     {
         protected QueryBase(BeautifulContext context)
         {
@@ -13,8 +13,5 @@ namespace BeautifulRestApi.Queries
         }
 
         protected BeautifulContext Context { get; }
-
-        protected string ConstructResourceHref(string baseHref, string collectionName, string id)
-            => string.Join("/", baseHref.TrimEnd('/'), collectionName, id);
     }
 }

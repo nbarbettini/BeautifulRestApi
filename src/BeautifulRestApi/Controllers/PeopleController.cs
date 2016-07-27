@@ -1,4 +1,5 @@
-﻿using BeautifulRestApi.Dal;
+﻿using System.Threading.Tasks;
+using BeautifulRestApi.Dal;
 using BeautifulRestApi.Queries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,18 +14,22 @@ namespace BeautifulRestApi.Controllers
 
         [HttpGet]
         [Route("people")]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var getAllQuery = new PeopleGetAllQuery(DataContext);
+            var getAllQuery = new GetAllPeopleQuery(
+                DataContext,
+                UrlHelper.Construct(RootHref, "people"));
 
-            return new ObjectResult(getAllQuery.Execute(BaseHref));
+            return new ObjectResult(await getAllQuery.Execute());
         }
 
         [HttpGet]
         [Route("people/{id}")]
         public IActionResult Get(string id)
         {
-            var getQuery = new PeopleGetQuery(DataContext, BaseHref);
+            var getQuery = new GetPersonQuery(
+                DataContext,
+                UrlHelper.Construct(RootHref, "people"));
 
             var person = getQuery.Execute(id);
 
