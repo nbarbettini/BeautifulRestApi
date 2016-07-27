@@ -27,7 +27,10 @@ namespace BeautifulRestApi
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(LinkFormattingFilter));
+            });
 
             services.AddDbContext<BeautifulContext>(opt => opt.UseInMemoryDatabase());
         }

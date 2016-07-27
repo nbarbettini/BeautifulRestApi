@@ -4,10 +4,7 @@ namespace BeautifulRestApi.Models
 {
     public abstract class Resource
     {
-        protected Resource(string href)
-        {
-            Meta.Href = href;
-        }
+        public Link Href { get; set; }
 
         [JsonProperty(Order = -2)]
         public Metadata Meta { get; set; } = new Metadata();

@@ -6,10 +6,9 @@ namespace BeautifulRestApi.Models
 {
     public class CollectionResponse<T> : Resource
     {
-        public CollectionResponse(string collectionHref, IEnumerable<T> items)
-            : base(collectionHref)
+        public CollectionResponse(Link href, IEnumerable<T> items)
         {
-            Meta.Relations = new[] {"collection"};
+            Href = href;
             Items = items.ToArray();
         }
 

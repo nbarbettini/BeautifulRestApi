@@ -4,8 +4,8 @@ namespace BeautifulRestApi.Models
 {
     public class PagedCollectionResponse<T> : CollectionResponse<T>
     {
-        public PagedCollectionResponse(string collectionHref, IEnumerable<T> items)
-            : base(collectionHref, items)
+        public PagedCollectionResponse(Link href, IEnumerable<T> items)
+            : base(href, items)
         {
         }
 

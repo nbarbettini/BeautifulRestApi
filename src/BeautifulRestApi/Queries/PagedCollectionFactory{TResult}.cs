@@ -9,11 +9,11 @@ namespace BeautifulRestApi.Queries
 {
     public class PagedCollectionFactory<TResult>
     {
-        private readonly string _baseHref;
+        private readonly string _endpoint;
 
-        public PagedCollectionFactory(string baseHref)
+        public PagedCollectionFactory(string endpoint)
         {
-            _baseHref = baseHref;
+            _endpoint = endpoint;
         }
 
         public async Task<PagedCollectionResponse<TResult>> CreateFrom<TSource>(IQueryable<TSource> queryable, Expression<Func<TSource, TResult>> selector, int offset, int limit)
@@ -26,9 +26,9 @@ namespace BeautifulRestApi.Queries
                 .Select(selector)
                 .ToArrayAsync();
 
-            return new PagedCollectionResponse<TResult>(_baseHref, items)
+            return new PagedCollectionResponse<TResult>(new CollectionLink(_endpoint), items)
             {
-                First = new Link(_baseHref, relation: "collection"),
+                First = new CollectionLink(_endpoint),
                 Last = GetLastLink(count, limit),
                 Next = GetNextLink(count, offset, limit),
                 Previous = GetPreviousLink(count, offset, limit),
@@ -40,11 +40,9 @@ namespace BeautifulRestApi.Queries
 
         private Link GetLastLink(int size, int limit)
         {
-            var href = size > limit
-                ? $"{_baseHref}?offset={Math.Floor((size - (double)limit) / limit) * limit}"
-                : _baseHref;
-
-            return new Link(href, relation: "collection");
+            return size > limit
+                ? new CollectionLink(_endpoint, $"offset={Math.Floor((size - (double) limit)/limit)*limit}")
+                : new CollectionLink(_endpoint);
         }
 
         private Link GetNextLink(int size, int offset, int limit)
@@ -53,7 +51,7 @@ namespace BeautifulRestApi.Queries
 
             return nextPage >= size
                 ? null 
-                : new Link($"{_baseHref}?offset={nextPage}", relation: "collection");
+                : new CollectionLink(_endpoint, $"offset={nextPage}");
         }
 
         private Link GetPreviousLink(int size, int offset, int limit)
@@ -65,11 +63,9 @@ namespace BeautifulRestApi.Queries
 
             var previousPage = Math.Max(offset - limit, 0);
 
-            var href = previousPage > 0
-                ? $"{_baseHref}?offset={previousPage}"
-                : _baseHref;
-
-            return new Link(href, relation: "collection");
+            return previousPage > 0
+                ? new CollectionLink(_endpoint, $"offset={previousPage}")
+                : new CollectionLink(_endpoint);
         }
     }
 }

@@ -19,14 +19,12 @@ namespace BeautifulRestApi.Controllers
         [Route("people")]
         public async Task<IActionResult> Get()
         {
-            var getAllQuery = new GetAllPeopleQuery(
-                DataContext,
-                UrlHelper.Construct(RootHref, "people"));
+            var getAllQuery = new GetAllPeopleQuery(DataContext);
 
             dynamic results = await getAllQuery.Execute();
 
             // Attach form definitions for discoverability
-            results.Forms = new[] {GetPeopleCollectionCreateForm(RootHref), GetPeopleCollectionSearchForm(RootHref)};
+            results.Forms = new[] {GetPeopleCollectionCreateForm(), GetPeopleCollectionSearchForm()};
 
             return new ObjectResult(results);
         }
@@ -35,9 +33,7 @@ namespace BeautifulRestApi.Controllers
         [Route("people/{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var getQuery = new GetPersonQuery(
-                DataContext,
-                UrlHelper.Construct(RootHref, "people"));
+            var getQuery = new GetPersonQuery(DataContext, "people");
 
             var person = await getQuery.Execute(id);
 
@@ -46,15 +42,15 @@ namespace BeautifulRestApi.Controllers
                 : new ObjectResult(person);
         }
 
-        private static Form GetPeopleCollectionCreateForm(string baseHref) =>
-            new Form(UrlHelper.Construct(baseHref, "people"), HttpMethod.Post.Method, new[]
+        private static Form GetPeopleCollectionCreateForm() =>
+            new Form("people", HttpMethod.Post.Method, new[]
             {
                 new FormField() { Name = "firstName", Type = "string", Required = true },
                 new FormField() { Name = "lastName", Type = "string", Required = true},
                 new FormField() { Name = "birthDate", Type = "datetime", Required = false } 
             });
 
-        private static Form GetPeopleCollectionSearchForm(string baseHref) => null;
+        private static Form GetPeopleCollectionSearchForm() => null;
     }
 }
 

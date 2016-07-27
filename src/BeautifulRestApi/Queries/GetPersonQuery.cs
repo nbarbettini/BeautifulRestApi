@@ -22,7 +22,8 @@ namespace BeautifulRestApi.Queries
 
             return p == null
                 ? null
-                : new PersonResponse(UrlHelper.Construct(_baseHref, p.Id), p.FirstName, p.LastName, p.BirthDate);
+                // todo
+                : new PersonResponse(new ResourceLink(_baseHref, p.Id), p.FirstName, p.LastName, p.BirthDate);
         }
     }
 }

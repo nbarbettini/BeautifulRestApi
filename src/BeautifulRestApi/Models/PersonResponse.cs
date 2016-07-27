@@ -4,9 +4,9 @@ namespace BeautifulRestApi.Models
 {
     public class PersonResponse : Resource
     {
-        public PersonResponse(string href, string firstName, string lastName, DateTimeOffset? birthDate)
-            : base(href)
+        public PersonResponse(Link href, string firstName, string lastName, DateTimeOffset? birthDate)
         {
+            Href = href;
             FirstName = firstName;
             LastName = lastName;
             BirthDate = birthDate;
