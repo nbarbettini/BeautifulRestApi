@@ -4,7 +4,7 @@ namespace BeautifulRestApi.Models
 {
     public class PersonResponse : Resource
     {
-        public PersonResponse(string href, string firstName, string lastName, DateTimeOffset birthDate)
+        public PersonResponse(string href, string firstName, string lastName, DateTimeOffset? birthDate)
             : base(href)
         {
             FirstName = firstName;
@@ -16,6 +16,6 @@ namespace BeautifulRestApi.Models
 
         public string LastName { get; }
 
-        public DateTimeOffset BirthDate { get; }
+        public DateTimeOffset? BirthDate { get; }
     }
 }

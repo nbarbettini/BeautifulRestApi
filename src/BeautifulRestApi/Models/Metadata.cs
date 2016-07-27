@@ -8,5 +8,8 @@ namespace BeautifulRestApi.Models
 
         [JsonProperty("rel", NullValueHandling = NullValueHandling.Ignore)]
         public string[] Relations { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Method { get; set; }
     }
 }

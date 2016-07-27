@@ -10,6 +10,6 @@ namespace BeautifulRestApi.Dal.DbModels
 
         public string LastName { get; set; }
 
-        public DateTimeOffset BirthDate { get; set; }
+        public DateTimeOffset? BirthDate { get; set; }
     }
 }

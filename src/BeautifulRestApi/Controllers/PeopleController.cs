@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Dynamic;
+using System.Net.Http;
+using System.Threading.Tasks;
 using BeautifulRestApi.Dal;
+using BeautifulRestApi.Models;
 using BeautifulRestApi.Queries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +23,12 @@ namespace BeautifulRestApi.Controllers
                 DataContext,
                 UrlHelper.Construct(RootHref, "people"));
 
-            return new ObjectResult(await getAllQuery.Execute());
+            dynamic results = await getAllQuery.Execute();
+
+            // Attach form definitions for discoverability
+            results.Forms = new[] {GetPeopleCollectionCreateForm(RootHref), GetPeopleCollectionSearchForm(RootHref)};
+
+            return new ObjectResult(results);
         }
 
         [HttpGet]
@@ -37,6 +45,16 @@ namespace BeautifulRestApi.Controllers
                 ? new NotFoundResult() as ActionResult
                 : new ObjectResult(person);
         }
+
+        private static Form GetPeopleCollectionCreateForm(string baseHref) =>
+            new Form(UrlHelper.Construct(baseHref, "people"), HttpMethod.Post.Method, new[]
+            {
+                new FormField() { Name = "firstName", Type = "string", Required = true },
+                new FormField() { Name = "lastName", Type = "string", Required = true},
+                new FormField() { Name = "birthDate", Type = "datetime", Required = false } 
+            });
+
+        private static Form GetPeopleCollectionSearchForm(string baseHref) => null;
     }
 }
 

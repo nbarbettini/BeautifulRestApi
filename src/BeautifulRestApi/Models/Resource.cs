@@ -11,5 +11,8 @@ namespace BeautifulRestApi.Models
 
         [JsonProperty(Order = -2)]
         public Metadata Meta { get; set; } = new Metadata();
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Form[] Forms { get; set; }
     }
 }
