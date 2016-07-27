@@ -25,13 +25,13 @@ namespace BeautifulRestApi.Controllers
 
         [HttpGet]
         [Route("people/{id}")]
-        public IActionResult Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
             var getQuery = new GetPersonQuery(
                 DataContext,
                 UrlHelper.Construct(RootHref, "people"));
 
-            var person = getQuery.Execute(id);
+            var person = await getQuery.Execute(id);
 
             return person == null
                 ? new NotFoundResult() as ActionResult

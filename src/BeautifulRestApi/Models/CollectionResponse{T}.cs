@@ -13,7 +13,6 @@ namespace BeautifulRestApi.Models
             Items = items.ToArray();
         }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public T[] Items { get; set; }
     }
 }

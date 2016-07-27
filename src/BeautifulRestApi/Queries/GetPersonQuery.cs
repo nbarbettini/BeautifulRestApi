@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BeautifulRestApi.Queries
 {
@@ -17,9 +16,9 @@ namespace BeautifulRestApi.Queries
             _baseHref = baseHref;
         }
 
-        public PersonResponse Execute(string id)
+        public async Task<PersonResponse> Execute(string id)
         {
-            var p = Context.People.SingleOrDefault(x => x.Id == id);
+            var p = await Context.People.SingleOrDefaultAsync(x => x.Id == id);
 
             return p == null
                 ? null
