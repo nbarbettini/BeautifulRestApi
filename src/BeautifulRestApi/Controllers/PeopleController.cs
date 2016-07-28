@@ -21,7 +21,7 @@ namespace BeautifulRestApi.Controllers
         {
             var getAllQuery = new GetAllPeopleQuery(DataContext);
 
-            dynamic results = await getAllQuery.Execute();
+            var results = await getAllQuery.Execute();
 
             // Attach form definitions for discoverability
             results.Forms = new[] {GetPeopleCollectionCreateForm(), GetPeopleCollectionSearchForm()};

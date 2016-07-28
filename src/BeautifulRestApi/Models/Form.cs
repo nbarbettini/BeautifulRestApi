@@ -8,18 +8,13 @@ namespace BeautifulRestApi.Models
     {
         public Form(string href, string method, IEnumerable<FormField> fields)
         {
-            Meta = new Metadata
-            {
-                Href = href,
-                Method = method,
-                Relations = new[] {"create-form"}
-            };
+            Meta = new Link(href, method: method, relations: new[] {"create-form "});
 
             Items = fields.ToArray();
         }
 
         [JsonProperty(Order = -2)]
-        public Metadata Meta { get; set; }
+        public Link Meta { get; set; }
 
         public FormField[] Items { get; set; }
     }

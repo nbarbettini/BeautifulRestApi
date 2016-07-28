@@ -6,7 +6,7 @@ namespace BeautifulRestApi.Models
     {
         public PersonResponse(Link href, string firstName, string lastName, DateTimeOffset? birthDate)
         {
-            Href = href;
+            Meta = href;
             FirstName = firstName;
             LastName = lastName;
             BirthDate = birthDate;

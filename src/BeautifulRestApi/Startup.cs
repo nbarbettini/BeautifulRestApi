@@ -1,5 +1,6 @@
 ﻿using System;
 using BeautifulRestApi.Dal;
+using BeautifulRestApi.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,10 +27,13 @@ namespace BeautifulRestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IResultEnricher, ResourceEnricher>();
+            services.AddTransient<ResultEnrichingFilter>();
+
             // Add framework services.
             services.AddMvc(options =>
             {
-                options.Filters.Add(typeof(LinkFormattingFilter));
+                options.Filters.Add(typeof(ResultEnrichingFilter));
             });
 
             services.AddDbContext<BeautifulContext>(opt => opt.UseInMemoryDatabase());
@@ -44,7 +48,10 @@ namespace BeautifulRestApi
             var context = app.ApplicationServices.GetService<BeautifulContext>();
             TestData.Seed(context);
 
-            app.UseMvc();
+            app.UseMvc(opt =>
+            {
+                opt.MapRoute("default", "{controller}/{id?}");
+            });
         }
     }
 }

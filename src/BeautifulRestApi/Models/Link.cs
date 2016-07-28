@@ -1,12 +1,18 @@
 ﻿namespace BeautifulRestApi.Models
 {
-    public abstract class Link
+    public class Link
     {
-        protected Link(string href)
+        public Link(string href, string[] relations = null, string method = null)
         {
             Href = href;
+            Relations = relations;
+            Method = method;
         }
 
         public string Href { get; }
+
+        public string[] Relations { get; }
+
+        public string Method { get; }
     }
 }
