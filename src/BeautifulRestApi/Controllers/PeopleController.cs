@@ -8,18 +8,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BeautifulRestApi.Controllers
 {
-    public class PeopleController : ControllerBase
+    public class PeopleController
     {
+        private const string Endpoint = "people";
+
+        private readonly BeautifulContext _context;
+
         public PeopleController(BeautifulContext context)
-            : base(context)
         {
+            _context = context;
         }
 
         [HttpGet]
-        [Route("people")]
+        [Route(Endpoint)]
         public async Task<IActionResult> Get()
         {
-            var getAllQuery = new GetAllPeopleQuery(DataContext);
+            var getAllQuery = new GetAllPeopleQuery(_context, Endpoint);
 
             var results = await getAllQuery.Execute();
 
@@ -30,10 +34,10 @@ namespace BeautifulRestApi.Controllers
         }
 
         [HttpGet]
-        [Route("people/{id}")]
+        [Route(Endpoint + "/{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var getQuery = new GetPersonQuery(DataContext, "people");
+            var getQuery = new GetPersonQuery(_context, Endpoint);
 
             var person = await getQuery.Execute(id);
 

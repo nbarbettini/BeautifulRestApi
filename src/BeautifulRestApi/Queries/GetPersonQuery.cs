@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +7,12 @@ namespace BeautifulRestApi.Queries
 {
     public class GetPersonQuery : QueryBase
     {
-        private readonly string _baseHref;
+        private readonly string _endpoint;
 
-        public GetPersonQuery(BeautifulContext context, string baseHref)
+        public GetPersonQuery(BeautifulContext context, string endpoint)
             : base(context)
         {
-            _baseHref = baseHref;
+            _endpoint = endpoint;
         }
 
         public async Task<PersonResponse> Execute(string id)
@@ -22,8 +21,7 @@ namespace BeautifulRestApi.Queries
 
             return p == null
                 ? null
-                // todo
-                : new PersonResponse(new ResourceLink(_baseHref, p.Id), p.FirstName, p.LastName, p.BirthDate);
+                : new PersonResponse(new ResourceLink(_endpoint, p.Id), p.FirstName, p.LastName, p.BirthDate);
         }
     }
 }
