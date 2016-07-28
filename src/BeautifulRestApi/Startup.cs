@@ -50,7 +50,8 @@ namespace BeautifulRestApi
 
             // Seed data store with test data
             var context = app.ApplicationServices.GetService<BeautifulContext>();
-            new TestPeople().Seed(context.People);
+            new TestPeople(53).Seed(context.People);
+
             context.SaveChanges();
 
             app.UseMvc(opt =>
