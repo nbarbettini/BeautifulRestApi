@@ -1,5 +1,6 @@
 ﻿using System;
 using BeautifulRestApi.Dal;
+using BeautifulRestApi.Dal.TestData;
 using BeautifulRestApi.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,8 +48,10 @@ namespace BeautifulRestApi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            // Seed data store with test data
             var context = app.ApplicationServices.GetService<BeautifulContext>();
-            TestData.Seed(context);
+            new TestPeople().Seed(context.People);
+            context.SaveChanges();
 
             app.UseMvc(opt =>
             {

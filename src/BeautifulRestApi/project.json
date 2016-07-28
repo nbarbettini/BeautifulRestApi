@@ -22,8 +22,7 @@
     "Microsoft.EntityFrameworkCore.InMemory": "1.0.0",
     "BeautifulRestApi.Dal": {
       "target": "project"
-    },
-    "Mapster": "2.4.3"
+    }
   },
   
   "frameworks": {
