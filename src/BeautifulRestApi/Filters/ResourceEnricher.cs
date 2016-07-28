@@ -27,7 +27,7 @@ namespace BeautifulRestApi.Filters
             }
             else
             {
-                href = urlHelper.Link("default", new {controller = asResourceLink.Href});
+                href = urlHelper.Link("default", new {controller = result.Meta.Href});
             }
 
             result.Meta = new Link(href, result.Meta.Relations, result.Meta.Method);

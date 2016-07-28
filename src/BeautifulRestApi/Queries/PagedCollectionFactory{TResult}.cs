@@ -16,7 +16,7 @@ namespace BeautifulRestApi.Queries
             _endpoint = endpoint;
         }
 
-        public async Task<PagedCollectionResponse<TResult>> CreateFrom<TSource>(IQueryable<TSource> queryable, Expression<Func<TSource, TResult>> selector, int offset, int limit)
+        public async Task<PagedCollection<TResult>> CreateFrom<TSource>(IQueryable<TSource> queryable, Expression<Func<TSource, TResult>> selector, int offset, int limit)
         {
             var count = await queryable.CountAsync();
 
@@ -26,7 +26,7 @@ namespace BeautifulRestApi.Queries
                 .Select(selector)
                 .ToArrayAsync();
 
-            return new PagedCollectionResponse<TResult>(new CollectionLink(_endpoint), items)
+            return new PagedCollection<TResult>(new CollectionLink(_endpoint), items)
             {
                 First = new CollectionLink(_endpoint),
                 Last = GetLastLink(count, limit),

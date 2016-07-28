@@ -1,21 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
 
 namespace BeautifulRestApi.Models
 {
-    public class Form
+    public class Form : Collection<FormField>
     {
-        public Form(string href, string method, IEnumerable<FormField> fields)
+        public Form(string path, string method, string relation, IEnumerable<FormField> fields)
+            : base(new Link(path, new[] { relation }, method), fields)
         {
-            Meta = new Link(href, method: method, relations: new[] {"create-form "});
-
-            Items = fields.ToArray();
         }
-
-        [JsonProperty(Order = -2)]
-        public Link Meta { get; set; }
-
-        public FormField[] Items { get; set; }
     }
 }

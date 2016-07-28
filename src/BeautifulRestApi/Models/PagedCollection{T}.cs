@@ -2,10 +2,10 @@
 
 namespace BeautifulRestApi.Models
 {
-    public class PagedCollectionResponse<T> : CollectionResponse<T>
+    public class PagedCollection<T> : Collection<T>
     {
-        public PagedCollectionResponse(Link href, IEnumerable<T> items)
-            : base(href, items)
+        public PagedCollection(Link meta, IEnumerable<T> items)
+            : base(meta, items)
         {
         }
 

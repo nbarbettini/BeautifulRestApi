@@ -43,7 +43,7 @@ namespace BeautifulRestApi.Controllers
         }
 
         private static Form GetPeopleCollectionCreateForm() =>
-            new Form("people", HttpMethod.Post.Method, new[]
+            new Form("people", HttpMethod.Post.Method, "create-form", new[]
             {
                 new FormField() { Name = "firstName", Type = "string", Required = true },
                 new FormField() { Name = "lastName", Type = "string", Required = true},

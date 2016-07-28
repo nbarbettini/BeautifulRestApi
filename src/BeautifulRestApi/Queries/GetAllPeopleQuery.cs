@@ -13,7 +13,7 @@ namespace BeautifulRestApi.Queries
         {
         }
 
-        public Task<PagedCollectionResponse<PersonResponse>> Execute(int offset = 0, int limit = 25)
+        public Task<PagedCollection<PersonResponse>> Execute(int offset = 0, int limit = 25)
         {
             var collectionFactory = new PagedCollectionFactory<PersonResponse>(Endpoint);
 
