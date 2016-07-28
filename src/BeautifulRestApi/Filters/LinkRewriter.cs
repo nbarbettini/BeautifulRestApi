@@ -15,6 +15,11 @@ namespace BeautifulRestApi.Filters
 
         public Link Rewrite(Link original)
         {
+            if (original == null)
+            {
+                return null;
+            }
+
             var asResourceLink = original as ResourceLink;
             if (asResourceLink != null)
             {
