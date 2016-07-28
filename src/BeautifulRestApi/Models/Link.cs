@@ -1,4 +1,6 @@
-﻿namespace BeautifulRestApi.Models
+﻿using Newtonsoft.Json;
+
+namespace BeautifulRestApi.Models
 {
     public class Link
     {
@@ -11,8 +13,10 @@
 
         public string Href { get; }
 
+        [JsonProperty(PropertyName = "rel", NullValueHandling = NullValueHandling.Ignore)]
         public string[] Relations { get; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Method { get; }
     }
 }

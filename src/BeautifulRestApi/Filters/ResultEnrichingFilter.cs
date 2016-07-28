@@ -23,15 +23,20 @@ namespace BeautifulRestApi.Filters
                 return Task.CompletedTask;
             }
 
-            foreach (var enricher in _enrichers)
-            {
-                if (enricher.CanEnrich(asObjectResult.Value))
-                {
-                    enricher.Enrich(context, asObjectResult.Value);
-                }
-            }
+            EnrichResult(context, asObjectResult.Value);
 
             return next();
+        }
+
+        private void EnrichResult(ResultExecutingContext context, object result)
+        {
+            foreach (var enricher in _enrichers)
+            {
+                if (enricher.CanEnrich(result))
+                {
+                    enricher.Enrich(context, result, EnrichResult);
+                }
+            }
         }
     }
 }

@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using BeautifulRestApi.Models;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
-namespace BeautifulRestApi.Queries
+namespace BeautifulRestApi.Models
 {
     public class PagedCollectionFactory<TResult>
     {
@@ -41,7 +41,7 @@ namespace BeautifulRestApi.Queries
         private Link GetLastLink(int size, int limit)
         {
             return size > limit
-                ? new CollectionLink(_endpoint, $"offset={Math.Floor((size - (double) limit)/limit)*limit}")
+                ? new CollectionLink(_endpoint, new RouteValueDictionary(new { offset = Math.Floor((size - (double)limit) / limit) * limit }))
                 : new CollectionLink(_endpoint);
         }
 
@@ -51,7 +51,7 @@ namespace BeautifulRestApi.Queries
 
             return nextPage >= size
                 ? null 
-                : new CollectionLink(_endpoint, $"offset={nextPage}");
+                : new CollectionLink(_endpoint, new RouteValueDictionary(new { offset = nextPage }));
         }
 
         private Link GetPreviousLink(int size, int offset, int limit)
@@ -64,7 +64,7 @@ namespace BeautifulRestApi.Queries
             var previousPage = Math.Max(offset - limit, 0);
 
             return previousPage > 0
-                ? new CollectionLink(_endpoint, $"offset={previousPage}")
+                ? new CollectionLink(_endpoint, new RouteValueDictionary(new { offset = previousPage }))
                 : new CollectionLink(_endpoint);
         }
     }

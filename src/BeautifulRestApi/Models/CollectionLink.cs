@@ -1,13 +1,15 @@
-﻿namespace BeautifulRestApi.Models
+﻿using Microsoft.AspNetCore.Routing;
+
+namespace BeautifulRestApi.Models
 {
     public class CollectionLink : Link
     {
-        public CollectionLink(string path, string parameters = null)
-            : base(path)
+        public CollectionLink(string path, RouteValueDictionary values = null)
+            : base(path, new[] {"collection"})
         {
-            Parameters = parameters;
+            Values = values;
         }
 
-        public string Parameters { get; }
+        public RouteValueDictionary Values { get; }
     }
 }

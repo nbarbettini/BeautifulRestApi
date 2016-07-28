@@ -5,20 +5,22 @@ using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace BeautifulRestApi.Filters
 {
-    public class ResourceEnricher : AbstractResultEnricher<Resource>
+    public class CollectionEnricher : AbstractResultEnricher<Collection>
     {
         private readonly IUrlHelperFactory _urlHelperFactory;
 
-        public ResourceEnricher(IUrlHelperFactory urlHelper)
+        public CollectionEnricher(IUrlHelperFactory urlHelper)
         {
             _urlHelperFactory = urlHelper;
         }
 
-        protected override void OnEnriching(ResultExecutingContext context, Resource result, Action<ResultExecutingContext, object> enrichChildAction)
+        protected override void OnEnriching(ResultExecutingContext context, Collection<T> result, Action<ResultExecutingContext, object> enrichChildAction)
         {
             var linkRewriter = new LinkRewriter(_urlHelperFactory.GetUrlHelper(context));
 
-            result.Meta = linkRewriter.Rewrite(result.Meta);
+            // foreach item in items
+
+            // need some way to call the parent filter on a new item
         }
     }
 }

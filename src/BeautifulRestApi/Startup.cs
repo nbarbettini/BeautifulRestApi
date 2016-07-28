@@ -28,6 +28,7 @@ namespace BeautifulRestApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IResultEnricher, ResourceEnricher>();
+            services.AddTransient<IResultEnricher, CollectionEnricher>();
             services.AddTransient<ResultEnrichingFilter>();
 
             // Add framework services.
