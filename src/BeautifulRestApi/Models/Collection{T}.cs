@@ -4,26 +4,21 @@ using System.Linq;
 
 namespace BeautifulRestApi.Models
 {
-    public abstract class Collection : Resource
+    public interface ICollection
     {
-        protected Collection(Link meta)
-        {
-            Meta = meta;
-        }
-
-        public abstract IEnumerator GetEnumerator();
+        IEnumerator GetEnumerator();
     }
 
-    public class Collection<T> : Collection
+    public class Collection<T> : Resource, ICollection
     {
         public Collection(Link meta, IEnumerable<T> items)
-            : base(meta)
         {
+            Meta = meta;
             Items = items.ToArray();
         }
 
         public T[] Items { get; set; }
 
-        public override IEnumerator GetEnumerator() => Items.GetEnumerator();
+        public IEnumerator GetEnumerator() => Items.GetEnumerator();
     }
 }

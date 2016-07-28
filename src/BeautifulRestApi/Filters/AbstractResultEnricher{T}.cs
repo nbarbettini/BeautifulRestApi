@@ -25,7 +25,7 @@ namespace BeautifulRestApi.Filters
 
         private static bool CanEnrich(Type type)
         {
-            if (type == typeof(T))
+            if (typeof(T).IsAssignableFrom(type))
             {
                 return true;
             }

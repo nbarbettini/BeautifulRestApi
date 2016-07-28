@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BeautifulRestApi.Models
 {
-    public abstract class PagedCollection : Resource
+    public abstract class PagedCollection : Resource, ICollection
     {
         protected PagedCollection(Link meta)
         {
