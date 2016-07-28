@@ -41,7 +41,7 @@ namespace BeautifulRestApi.Models
         private Link GetLastLink(int size, int limit)
         {
             return size > limit
-                ? new CollectionLink(_endpoint, new RouteValueDictionary(new { offset = Math.Floor((size - (double)limit) / limit) * limit }))
+                ? new CollectionLink(_endpoint, new RouteValueDictionary(new { offset = Math.Ceiling((size - (double)limit) / limit) * limit }))
                 : new CollectionLink(_endpoint);
         }
 
