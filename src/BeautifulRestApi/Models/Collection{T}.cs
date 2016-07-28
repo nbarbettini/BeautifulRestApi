@@ -1,17 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace BeautifulRestApi.Models
 {
-    public class Collection<T> : Resource
+    public abstract class Collection : Resource
     {
-        public Collection(Link meta, IEnumerable<T> items)
+        protected Collection(Link meta)
         {
             Meta = meta;
+        }
+
+        public abstract IEnumerator GetEnumerator();
+    }
+
+    public class Collection<T> : Collection
+    {
+        public Collection(Link meta, IEnumerable<T> items)
+            : base(meta)
+        {
             Items = items.ToArray();
         }
 
         public T[] Items { get; set; }
+
+        public override IEnumerator GetEnumerator() => Items.GetEnumerator();
     }
 }
