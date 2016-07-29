@@ -31,7 +31,7 @@ namespace BeautifulRestApi.Controllers
             var results = await getAllQuery.Execute(parameters);
 
             // Attach form definitions for discoverability
-            results.Forms = new[] {GetPeopleCollectionCreateForm(), GetPeopleCollectionSearchForm()};
+            results.Forms = new[] {GetPeopleCollectionCreateForm()};
 
             return new ObjectResult(results);
         }
@@ -52,12 +52,10 @@ namespace BeautifulRestApi.Controllers
         private static Form GetPeopleCollectionCreateForm() =>
             new Form("people", HttpMethod.Post.Method, "create-form", new[]
             {
-                new FormField() { Name = "firstName", Type = "string", Required = true },
-                new FormField() { Name = "lastName", Type = "string", Required = true},
-                new FormField() { Name = "birthDate", Type = "datetime", Required = false } 
+                new FormField { Name = "firstName", Type = "string", Required = true },
+                new FormField { Name = "lastName", Type = "string", Required = true},
+                new FormField { Name = "birthDate", Type = "datetime", Required = false } 
             });
-
-        private static Form GetPeopleCollectionSearchForm() => null;
     }
 }
 
