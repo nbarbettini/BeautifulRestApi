@@ -32,7 +32,7 @@ namespace BeautifulRestApi.Controllers
             var results = await getAllQuery.Execute(parameters);
 
             // Attach form definitions for discoverability
-            results.Forms = new[] {GetPeopleCollectionCreateForm()};
+            results.Forms = new[] {Form.FromModel<PersonCreateModel>(Endpoint, "POST", "create-form")};
 
             return new ObjectResult(results);
         }
@@ -63,14 +63,6 @@ namespace BeautifulRestApi.Controllers
 
             return new CreatedAtRouteResult("default", new { controller = Endpoint, id = (person.Meta as ResourceLink).Id}, person);
         }
-
-        private static Form GetPeopleCollectionCreateForm() =>
-            new Form("people", HttpMethod.Post.Method, "create-form", new[]
-            {
-                new FormField { Name = "firstName", Type = "string", Required = true },
-                new FormField { Name = "lastName", Type = "string", Required = true},
-                new FormField { Name = "birthDate", Type = "datetime", Required = false } 
-            });
     }
 }
 
