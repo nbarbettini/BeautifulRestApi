@@ -11,7 +11,7 @@ namespace BeautifulRestApi.Controllers
 {
     public class PeopleController
     {
-        private const string Endpoint = "people";
+        public const string Endpoint = "people";
 
         private readonly BeautifulContext _context;
         private readonly PagedCollectionParameters _defaultPagingOptions;
