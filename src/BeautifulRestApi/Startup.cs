@@ -1,5 +1,4 @@
-﻿using System;
-using BeautifulRestApi.Dal;
+﻿using BeautifulRestApi.Dal;
 using BeautifulRestApi.Dal.TestData;
 using BeautifulRestApi.Filters;
 using BeautifulRestApi.Models;
@@ -30,11 +29,6 @@ namespace BeautifulRestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IResultEnricher, ResourceEnricher>();
-            services.AddTransient<IResultEnricher, CollectionEnricher>();
-            services.AddTransient<IResultEnricher, PagedCollectionEnricher>();
-            services.AddTransient<ResultEnrichingFilter>();
-
             services.AddSingleton(Options.Create(new PagedCollectionParameters
             {
                 Limit = 25,
@@ -44,7 +38,7 @@ namespace BeautifulRestApi
             // Add framework services.
             services.AddMvc(options =>
             {
-                options.Filters.Add(typeof(ResultEnrichingFilter));
+                options.Filters.Add(typeof(LinkRewritingFilter));
                 options.Filters.Add(typeof(JsonExceptionFilter));
             });
 
