@@ -11,5 +11,7 @@ namespace BeautifulRestApi.Dal
         }
 
         public DbSet<Person> People { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace BeautifulRestApi.Dal.TestData
     {
         public TestPeople(int numberOfPeople)
         {
-            Data = GeneratePeople().Take(numberOfPeople).ToArray();
+            Data = Generate().Take(numberOfPeople).ToArray();
         }
 
         private static readonly string[] GivenNames =
@@ -22,14 +22,14 @@ namespace BeautifulRestApi.Dal.TestData
             "Smith", "Testerman", "Johnson", "Jones", "Garcia", "Cole", "Lee"
         };
 
-        private static IEnumerable<Person> GeneratePeople()
+        private static IEnumerable<Person> Generate()
         {
             var random = new Random();
 
             while (true)
             {
                 yield return new Person {
-                    Id = Guid.NewGuid().ToString().Replace("-", string.Empty),
+                    Id = IdGenerator.GetId(),
                     FirstName = GivenNames[random.Next(GivenNames.Length - 1)],
                     LastName = Surnames[random.Next(Surnames.Length - 1)],
                     BirthDate = new DateTimeOffset(

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using BeautifulRestApi.Controllers;
 using BeautifulRestApi.Dal;
 using BeautifulRestApi.Dal.TestData;
@@ -32,6 +33,8 @@ namespace BeautifulRestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<BeautifulContext>(opt => opt.UseInMemoryDatabase());
+
             services.AddSingleton(Options.Create(new PagedCollectionParameters
             {
                 Limit = 25,
@@ -46,8 +49,6 @@ namespace BeautifulRestApi
 
             // Add POCO mapping configurations
             TypeAdapterConfig.GlobalSettings.Scan(typeof(Startup).GetTypeInfo().Assembly);
-
-            services.AddDbContext<BeautifulContext>(opt => opt.UseInMemoryDatabase());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,7 +59,12 @@ namespace BeautifulRestApi
 
             // Seed data store with test data
             var context = app.ApplicationServices.GetService<BeautifulContext>();
-            new TestPeople(53).Seed(context.People);
+            
+            var fakePeople = new TestPeople(26);
+            var fakeOrders = new TestOrders(100, fakePeople.Data.Select(p => p.Id).ToArray());
+
+            fakePeople.Seed(context.People);
+            fakeOrders.Seed(context.Orders);
 
             context.SaveChanges();
 
