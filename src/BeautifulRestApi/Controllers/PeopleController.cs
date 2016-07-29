@@ -28,8 +28,6 @@ namespace BeautifulRestApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(PagedCollectionParameters parameters)
         {
-            throw new NotImplementedException();
-
             var getAllQuery = new GetAllPeopleQuery(_context, Endpoint, _defaultPagingOptions);
             var results = await getAllQuery.Execute(parameters);
 
