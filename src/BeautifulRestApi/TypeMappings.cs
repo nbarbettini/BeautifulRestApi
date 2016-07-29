@@ -11,7 +11,7 @@ namespace BeautifulRestApi
             config.ForType<Dal.DbModels.Person, Person>()
                 .MapWith(src => new Person
                 {
-                    Meta = new ResourceLink(PeopleController.Endpoint, src.Id),
+                    Meta = PlaceholderLink.ToResource(PeopleController.Endpoint, src.Id, "GET", null),
                     FirstName = src.FirstName,
                     LastName = src.LastName,
                     BirthDate = src.BirthDate

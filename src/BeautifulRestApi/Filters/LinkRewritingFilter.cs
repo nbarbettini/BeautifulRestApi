@@ -37,9 +37,9 @@ namespace BeautifulRestApi.Filters
         {
             var allProperties = input.GetType().GetTypeInfo().GetAllProperties().ToArray();
 
-            foreach (var linkProperty in allProperties.Where(p => p.PropertyType == typeof(Link)))
+            foreach (var linkProperty in allProperties.Where(p => p.PropertyType.IsAssignableFrom(typeof(ILink))))
             {
-                var rewritten = rewriter.Rewrite(linkProperty.GetValue(input) as Link);
+                var rewritten = rewriter.Rewrite(linkProperty.GetValue(input) as ILink);
 
                 if (rewritten != null)
                 {

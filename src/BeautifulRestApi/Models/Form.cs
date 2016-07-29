@@ -10,7 +10,13 @@ namespace BeautifulRestApi.Models
     {
         public Form(string path, string method, string relation, IEnumerable<FormField> fields)
         {
-            Meta = new Link(path, new[] {relation}, method);
+            Meta = new PlaceholderLink
+            {
+                Href = path,
+                Method = method,
+                Relations = new[] {relation}
+            };
+
             Items = fields.ToArray();
         }
 

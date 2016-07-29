@@ -8,12 +8,12 @@
 
         public int Size { get; set; }
 
-        public Link First { get; set; }
+        public ILink First { get; set; }
 
-        public Link Previous { get; set; }
+        public ILink Previous { get; set; }
 
-        public Link Next { get; set; }
+        public ILink Next { get; set; }
 
-        public Link Last { get; set; }
+        public ILink Last { get; set; }
     }
 }

@@ -69,7 +69,7 @@ namespace BeautifulRestApi.Controllers
             var createQuery = new InsertPersonQuery(_context, Endpoint);
             var person = await createQuery.Execute(model);
 
-            return new CreatedAtRouteResult("default", new { controller = Endpoint, id = (person.Meta as ResourceLink).Id}, person);
+            return new CreatedAtRouteResult("default", new { controller = Endpoint, id = person.Item1}, person.Item2);
         }
     }
 }

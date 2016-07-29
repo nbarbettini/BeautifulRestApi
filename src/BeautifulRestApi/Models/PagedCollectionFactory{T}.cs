@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeautifulRestApi.Models
@@ -27,9 +25,9 @@ namespace BeautifulRestApi.Models
 
             return new PagedCollection<T>()
             {
-                Meta = new CollectionLink(_endpoint),
+                Meta = PlaceholderLink.ToCollection(_endpoint),
                 Items = items,
-                First = new CollectionLink(_endpoint),
+                First = PlaceholderLink.ToCollection(_endpoint),
                 Last = GetLastLink(count, limit),
                 Next = GetNextLink(count, offset, limit),
                 Previous = GetPreviousLink(count, offset, limit),
@@ -39,23 +37,41 @@ namespace BeautifulRestApi.Models
             };
         }
 
-        private Link GetLastLink(int size, int limit)
+        private ILink GetLastLink(int size, int limit)
         {
-            return size > limit
-                ? new CollectionLink(_endpoint, new RouteValueDictionary(new { limit, offset = Math.Ceiling((size - (double)limit) / limit) * limit }))
-                : new CollectionLink(_endpoint);
+            if (size <= limit)
+            {
+                return PlaceholderLink.ToCollection(_endpoint);
+            }
+
+            var routeValues = new
+            {
+                limit,
+                offset = Math.Ceiling((size - (double) limit)/limit) * limit
+            };
+
+            return PlaceholderLink.ToCollection(_endpoint, values: routeValues);
         }
 
-        private Link GetNextLink(int size, int offset, int limit)
+        private ILink GetNextLink(int size, int offset, int limit)
         {
             var nextPage = offset + limit;
 
-            return nextPage < size
-                ? new CollectionLink(_endpoint, new RouteValueDictionary(new {limit, offset = nextPage}))
-                : null;
+            if (nextPage >= size)
+            {
+                return null;
+            }
+
+            var routeValues = new
+            {
+                limit,
+                offset = nextPage
+            };
+
+            return PlaceholderLink.ToCollection(_endpoint, values: routeValues);
         }
 
-        private Link GetPreviousLink(int size, int offset, int limit)
+        private ILink GetPreviousLink(int size, int offset, int limit)
         {
             if (offset == 0)
             {
@@ -69,9 +85,18 @@ namespace BeautifulRestApi.Models
 
             var previousPage = Math.Max(offset - limit, 0);
 
-            return previousPage > 0
-                ? new CollectionLink(_endpoint, new RouteValueDictionary(new {limit, offset = previousPage}))
-                : new CollectionLink(_endpoint);
+            if (previousPage <= 0)
+            {
+                return PlaceholderLink.ToCollection(_endpoint);
+            }
+
+            var routeValues = new
+            {
+                limit,
+                offset = previousPage
+            };
+
+            return PlaceholderLink.ToCollection(_endpoint, values: routeValues);
         }
     }
 }

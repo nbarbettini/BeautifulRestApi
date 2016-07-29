@@ -2,21 +2,12 @@
 
 namespace BeautifulRestApi.Models
 {
-    public class Link
+    public class Link : ILink
     {
-        public Link(string href, string[] relations = null, string method = null)
-        {
-            Href = href;
-            Relations = relations;
-            Method = method;
-        }
+        public string Href { get; set; }
 
-        public string Href { get; }
+        public string[] Relations { get; set; }
 
-        [JsonProperty(PropertyName = "rel", NullValueHandling = NullValueHandling.Ignore)]
-        public string[] Relations { get; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string Method { get; }
+        public string Method { get; set; }
     }
 }

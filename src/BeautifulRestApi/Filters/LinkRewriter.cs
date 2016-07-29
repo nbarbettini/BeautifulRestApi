@@ -1,4 +1,5 @@
-﻿using BeautifulRestApi.Models;
+﻿using System;
+using BeautifulRestApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
@@ -13,34 +14,43 @@ namespace BeautifulRestApi.Filters
             _urlHelper = urlHelper;
         }
 
-        public Link Rewrite(Link original)
+        public ILink Rewrite(ILink original)
         {
             if (original == null)
             {
                 return null;
             }
 
-            var asResourceLink = original as ResourceLink;
-            if (asResourceLink != null)
-            {
-                var href = _urlHelper.Link("default", new { controller = asResourceLink.Href, id = asResourceLink.Id });
-                return new Link(href, original.Relations, original.Method);
-            }
+            string href = null;
+            string method = null;
+            string[] relations = null;
 
-            var asCollectionLink = original as CollectionLink;
-            if (asCollectionLink != null)
+            var asPlaceholderLink = original as PlaceholderLink;
+            if (asPlaceholderLink != null)
             {
-                var extendedValues = new RouteValueDictionary(asCollectionLink.Values)
+                var routeValues = new RouteValueDictionary(asPlaceholderLink.Values)
                 {
-                    { "controller", original.Href }
+                    {"controller", original.Href}
                 };
 
-                var href = _urlHelper.Link("default", extendedValues);
-                return new Link(href, original.Relations, original.Method);
+                href = _urlHelper.Link("default", routeValues);
+            }
+            else
+            {
+                href = original.Href;
             }
 
-            var linkHref = _urlHelper.Link("default", new { controller = original.Href });
-            return new Link(linkHref, original.Relations, original.Method);
+            if (!original.Method.Equals("GET", StringComparison.OrdinalIgnoreCase))
+            {
+                method = original.Method;
+            }
+
+            if (original.Relations?.Length > 0)
+            {
+                relations = original.Relations;
+            }
+
+            return new Link { Href = href, Method = method, Relations = relations };
         }
     }
 }
