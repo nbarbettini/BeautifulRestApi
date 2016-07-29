@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeautifulRestApi.Queries
@@ -21,13 +22,7 @@ namespace BeautifulRestApi.Queries
 
             return p == null
                 ? null
-                : new Person
-                {
-                    Meta = new ResourceLink(_endpoint, p.Id),
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    BirthDate = p.BirthDate
-                };
+                : p.Adapt<Person>();
         }
     }
 }

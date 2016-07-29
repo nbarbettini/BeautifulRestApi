@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
+using Mapster;
 
 namespace BeautifulRestApi.Queries
 {
@@ -14,6 +16,7 @@ namespace BeautifulRestApi.Queries
         {
             _endpoint = endpoint;
             _defaultPagingParameters = defaultPagingParameters;
+            //_adapter = adapter;
         }
 
         public Task<PagedCollection<Person>> Execute(PagedCollectionParameters parameters)
@@ -21,14 +24,7 @@ namespace BeautifulRestApi.Queries
             var collectionFactory = new PagedCollectionFactory<Person>(_endpoint);
 
             return collectionFactory.CreateFrom(
-                Context.People,
-                p => new Person
-                {
-                    Meta = new ResourceLink(_endpoint, p.Id),
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    BirthDate = p.BirthDate
-                },
+                Context.People.ProjectToType<Person>(),
                 parameters.Offset ?? _defaultPagingParameters.Offset.Value,
                 parameters.Limit ?? _defaultPagingParameters.Limit.Value);
         }

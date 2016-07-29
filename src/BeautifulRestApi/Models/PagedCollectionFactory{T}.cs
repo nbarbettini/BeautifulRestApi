@@ -16,14 +16,13 @@ namespace BeautifulRestApi.Models
             _endpoint = endpoint;
         }
 
-        public async Task<PagedCollection<T>> CreateFrom<TSource>(IQueryable<TSource> queryable, Expression<Func<TSource, T>> selector, int offset, int limit)
+        public async Task<PagedCollection<T>> CreateFrom(IQueryable<T> queryable, int offset, int limit)
         {
             var count = await queryable.CountAsync();
 
             var items = await queryable
                 .Skip(offset)
                 .Take(limit)
-                .Select(selector)
                 .ToArrayAsync();
 
             return new PagedCollection<T>()

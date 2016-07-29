@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
 using BeautifulRestApi.Queries;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -44,6 +45,13 @@ namespace BeautifulRestApi.Controllers
             return person == null
                 ? new NotFoundResult() as ActionResult
                 : new ObjectResult(person);
+        }
+
+        [HttpGet]
+        [Route("{id}/orders")]
+        public async Task<IActionResult> GetOrders(string id)
+        {
+            return new ObjectResult(new { cool = "yep" });
         }
 
         [HttpPost]

@@ -1,7 +1,10 @@
-﻿using BeautifulRestApi.Dal;
+﻿using System.Reflection;
+using BeautifulRestApi.Controllers;
+using BeautifulRestApi.Dal;
 using BeautifulRestApi.Dal.TestData;
 using BeautifulRestApi.Filters;
 using BeautifulRestApi.Models;
+using Mapster;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -35,12 +38,14 @@ namespace BeautifulRestApi
                 Offset = 0
             }));
 
-            // Add framework services.
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(LinkRewritingFilter));
-                options.Filters.Add(typeof(JsonExceptionFilter));
+                //options.Filters.Add(typeof(JsonExceptionFilter));
             });
+
+            // Add POCO mapping configurations
+            TypeAdapterConfig.GlobalSettings.Scan(typeof(Startup).GetTypeInfo().Assembly);
 
             services.AddDbContext<BeautifulContext>(opt => opt.UseInMemoryDatabase());
         }
