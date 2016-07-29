@@ -18,12 +18,10 @@ namespace BeautifulRestApi.Filters
         public Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
         {
             var asObjectResult = context.Result as ObjectResult;
-            if (asObjectResult == null)
+            if (asObjectResult != null)
             {
-                return Task.CompletedTask;
+                EnrichResult(context, asObjectResult.Value);
             }
-
-            EnrichResult(context, asObjectResult.Value);
 
             return next();
         }
