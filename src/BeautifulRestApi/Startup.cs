@@ -45,6 +45,7 @@ namespace BeautifulRestApi
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(ResultEnrichingFilter));
+                options.Filters.Add(typeof(JsonExceptionFilter));
             });
 
             services.AddDbContext<BeautifulContext>(opt => opt.UseInMemoryDatabase());

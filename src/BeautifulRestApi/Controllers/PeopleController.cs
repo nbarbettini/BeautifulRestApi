@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Dynamic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BeautifulRestApi.Dal;
@@ -27,8 +28,9 @@ namespace BeautifulRestApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(PagedCollectionParameters parameters)
         {
-            var getAllQuery = new GetAllPeopleQuery(_context, Endpoint, _defaultPagingOptions);
+            throw new NotImplementedException();
 
+            var getAllQuery = new GetAllPeopleQuery(_context, Endpoint, _defaultPagingOptions);
             var results = await getAllQuery.Execute(parameters);
 
             // Attach form definitions for discoverability
@@ -42,7 +44,6 @@ namespace BeautifulRestApi.Controllers
         public async Task<IActionResult> Get(string id)
         {
             var getQuery = new GetPersonQuery(_context, Endpoint);
-
             var person = await getQuery.Execute(id);
 
             return person == null
@@ -55,7 +56,11 @@ namespace BeautifulRestApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(); // todo better error
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = ModelState.Values.First().Errors.First().ErrorMessage
+                });
             }
 
             var createQuery = new InsertPersonQuery(_context, Endpoint);
