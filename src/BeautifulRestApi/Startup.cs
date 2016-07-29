@@ -2,12 +2,14 @@
 using BeautifulRestApi.Dal;
 using BeautifulRestApi.Dal.TestData;
 using BeautifulRestApi.Filters;
+using BeautifulRestApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace BeautifulRestApi
 {
@@ -32,6 +34,12 @@ namespace BeautifulRestApi
             services.AddTransient<IResultEnricher, CollectionEnricher>();
             services.AddTransient<IResultEnricher, PagedCollectionEnricher>();
             services.AddTransient<ResultEnrichingFilter>();
+
+            services.AddSingleton(Options.Create(new PagedCollectionParameters
+            {
+                Limit = 25,
+                Offset = 0
+            }));
 
             // Add framework services.
             services.AddMvc(options =>

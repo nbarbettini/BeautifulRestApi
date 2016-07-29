@@ -5,6 +5,7 @@ using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
 using BeautifulRestApi.Queries;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace BeautifulRestApi.Controllers
 {
@@ -13,19 +14,21 @@ namespace BeautifulRestApi.Controllers
         private const string Endpoint = "people";
 
         private readonly BeautifulContext _context;
+        private readonly PagedCollectionParameters _defaultPagingOptions;
 
-        public PeopleController(BeautifulContext context)
+        public PeopleController(BeautifulContext context, IOptions<PagedCollectionParameters> defaultPagingOptions)
         {
             _context = context;
+            _defaultPagingOptions = defaultPagingOptions.Value;
         }
 
         [HttpGet]
         [Route(Endpoint)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(PagedCollectionParameters parameters)
         {
-            var getAllQuery = new GetAllPeopleQuery(_context, Endpoint);
+            var getAllQuery = new GetAllPeopleQuery(_context, Endpoint, _defaultPagingOptions);
 
-            var results = await getAllQuery.Execute();
+            var results = await getAllQuery.Execute(parameters);
 
             // Attach form definitions for discoverability
             results.Forms = new[] {GetPeopleCollectionCreateForm(), GetPeopleCollectionSearchForm()};

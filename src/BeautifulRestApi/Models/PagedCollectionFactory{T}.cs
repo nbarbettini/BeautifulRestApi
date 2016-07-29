@@ -41,7 +41,7 @@ namespace BeautifulRestApi.Models
         private Link GetLastLink(int size, int limit)
         {
             return size > limit
-                ? new CollectionLink(_endpoint, new RouteValueDictionary(new { offset = Math.Ceiling((size - (double)limit) / limit) * limit }))
+                ? new CollectionLink(_endpoint, new RouteValueDictionary(new { limit, offset = Math.Ceiling((size - (double)limit) / limit) * limit }))
                 : new CollectionLink(_endpoint);
         }
 
@@ -49,9 +49,9 @@ namespace BeautifulRestApi.Models
         {
             var nextPage = offset + limit;
 
-            return nextPage >= size
-                ? null 
-                : new CollectionLink(_endpoint, new RouteValueDictionary(new { offset = nextPage }));
+            return nextPage < size
+                ? new CollectionLink(_endpoint, new RouteValueDictionary(new {limit, offset = nextPage}))
+                : null;
         }
 
         private Link GetPreviousLink(int size, int offset, int limit)
@@ -61,10 +61,15 @@ namespace BeautifulRestApi.Models
                 return null;
             }
 
+            if (offset > size)
+            {
+                return GetLastLink(size, limit);
+            }
+
             var previousPage = Math.Max(offset - limit, 0);
 
             return previousPage > 0
-                ? new CollectionLink(_endpoint, new RouteValueDictionary(new { offset = previousPage }))
+                ? new CollectionLink(_endpoint, new RouteValueDictionary(new {limit, offset = previousPage}))
                 : new CollectionLink(_endpoint);
         }
     }
