@@ -26,8 +26,10 @@ namespace BeautifulRestApi.Models
                 .Select(selector)
                 .ToArrayAsync();
 
-            return new PagedCollection<T>(new CollectionLink(_endpoint), items)
+            return new PagedCollection<T>()
             {
+                Meta = new CollectionLink(_endpoint),
+                Items = items,
                 First = new CollectionLink(_endpoint),
                 Last = GetLastLink(count, limit),
                 Next = GetNextLink(count, offset, limit),

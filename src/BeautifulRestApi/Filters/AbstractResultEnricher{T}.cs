@@ -21,8 +21,6 @@ namespace BeautifulRestApi.Filters
             OnEnriching(context, concrete, enrichAction);
         }
 
-        protected abstract void OnEnriching(ResultExecutingContext context, T result, Action<ResultExecutingContext, object> enrichAction);
-
         private static bool CanEnrich(Type type)
         {
             if (typeof(T).IsAssignableFrom(type))
@@ -32,5 +30,7 @@ namespace BeautifulRestApi.Filters
 
             return type != null && CanEnrich(type.GetTypeInfo().BaseType);
         }
+
+        protected abstract void OnEnriching(ResultExecutingContext context, T result, Action<ResultExecutingContext, object> enrichAction);
     }
 }

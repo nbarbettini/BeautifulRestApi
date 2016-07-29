@@ -15,13 +15,19 @@ namespace BeautifulRestApi.Queries
             _endpoint = endpoint;
         }
 
-        public async Task<PersonResponse> Execute(string id)
+        public async Task<Person> Execute(string id)
         {
             var p = await Context.People.SingleOrDefaultAsync(x => x.Id == id);
 
             return p == null
                 ? null
-                : new PersonResponse(new ResourceLink(_endpoint, p.Id), p.FirstName, p.LastName, p.BirthDate);
+                : new Person
+                {
+                    Meta = new ResourceLink(_endpoint, p.Id),
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    BirthDate = p.BirthDate
+                };
         }
     }
 }

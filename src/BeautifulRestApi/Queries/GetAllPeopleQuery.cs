@@ -16,13 +16,19 @@ namespace BeautifulRestApi.Queries
             _defaultPagingParameters = defaultPagingParameters;
         }
 
-        public Task<PagedCollection<PersonResponse>> Execute(PagedCollectionParameters parameters)
+        public Task<PagedCollection<Person>> Execute(PagedCollectionParameters parameters)
         {
-            var collectionFactory = new PagedCollectionFactory<PersonResponse>(_endpoint);
+            var collectionFactory = new PagedCollectionFactory<Person>(_endpoint);
 
             return collectionFactory.CreateFrom(
                 Context.People,
-                person => new PersonResponse(new ResourceLink(_endpoint, person.Id), person.FirstName, person.LastName, person.BirthDate),
+                p => new Person
+                {
+                    Meta = new ResourceLink(_endpoint, p.Id),
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    BirthDate = p.BirthDate
+                },
                 parameters.Offset ?? _defaultPagingParameters.Offset.Value,
                 parameters.Limit ?? _defaultPagingParameters.Limit.Value);
         }

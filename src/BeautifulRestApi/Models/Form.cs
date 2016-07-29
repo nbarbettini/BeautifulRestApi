@@ -9,8 +9,9 @@ namespace BeautifulRestApi.Models
     public class Form : Collection<FormField>
     {
         public Form(string path, string method, string relation, IEnumerable<FormField> fields)
-            : base(new Link(path, new[] { relation }, method), fields)
         {
+            Meta = new Link(path, new[] {relation}, method);
+            Items = fields.ToArray();
         }
 
         public static Form FromModel<T>(string path, string method, string relation)

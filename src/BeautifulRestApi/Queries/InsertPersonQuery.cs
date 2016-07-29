@@ -15,7 +15,7 @@ namespace BeautifulRestApi.Queries
             _endpoint = endpoint;
         }
 
-        public async Task<PersonResponse> Execute(PersonCreateModel model)
+        public async Task<Person> Execute(PersonCreateModel model)
         {
             var entry = Context.People.Add(new Dal.DbModels.Person
             {
@@ -27,11 +27,13 @@ namespace BeautifulRestApi.Queries
 
             await Context.SaveChangesAsync();
 
-            return new PersonResponse(
-                new ResourceLink(_endpoint, entry.Entity.Id),
-                entry.Entity.FirstName,
-                entry.Entity.LastName,
-                entry.Entity.BirthDate);
+            return new Person
+            {
+                Meta = new ResourceLink(_endpoint, entry.Entity.Id),
+                FirstName = entry.Entity.FirstName,
+                LastName = entry.Entity.LastName,
+                BirthDate = entry.Entity.BirthDate
+            };
         }
     }
 }

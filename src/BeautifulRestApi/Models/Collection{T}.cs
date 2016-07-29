@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BeautifulRestApi.Models
 {
@@ -11,12 +9,6 @@ namespace BeautifulRestApi.Models
 
     public class Collection<T> : Resource, ICollection
     {
-        public Collection(Link meta, IEnumerable<T> items)
-        {
-            Meta = meta;
-            Items = items.ToArray();
-        }
-
         public T[] Items { get; set; }
 
         public IEnumerator GetEnumerator() => Items.GetEnumerator();
