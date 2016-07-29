@@ -6,19 +6,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeautifulRestApi.Queries
 {
-    public class GetPersonQuery : QueryBase
+    public class GetPersonQuery
     {
-        private readonly string _endpoint;
+        private readonly BeautifulContext _context;
 
-        public GetPersonQuery(BeautifulContext context, string endpoint)
-            : base(context)
+        public GetPersonQuery(BeautifulContext context)
         {
-            _endpoint = endpoint;
+            _context = context;
         }
 
         public async Task<Person> Execute(string id)
         {
-            var p = await Context.People.SingleOrDefaultAsync(x => x.Id == id);
+            var p = await _context.People.SingleOrDefaultAsync(x => x.Id == id);
 
             return p == null
                 ? null

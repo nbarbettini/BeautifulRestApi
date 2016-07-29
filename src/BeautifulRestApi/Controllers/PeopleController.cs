@@ -39,7 +39,7 @@ namespace BeautifulRestApi.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var getQuery = new GetPersonQuery(_context, Endpoint);
+            var getQuery = new GetPersonQuery(_context);
             var person = await getQuery.Execute(id);
 
             return person == null
@@ -68,7 +68,7 @@ namespace BeautifulRestApi.Controllers
                 });
             }
 
-            var createQuery = new InsertPersonQuery(_context, Endpoint);
+            var createQuery = new InsertPersonQuery(_context);
             var person = await createQuery.Execute(model);
 
             return new CreatedAtRouteResult("default", new { controller = Endpoint, id = person.Item1}, person.Item2);
