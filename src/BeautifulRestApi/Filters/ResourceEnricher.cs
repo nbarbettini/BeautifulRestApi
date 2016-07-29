@@ -14,11 +14,19 @@ namespace BeautifulRestApi.Filters
             _urlHelperFactory = urlHelper;
         }
 
-        protected override void OnEnriching(ResultExecutingContext context, Resource result, Action<ResultExecutingContext, object> enrichChildAction)
+        protected override void OnEnriching(ResultExecutingContext context, Resource result, Action<ResultExecutingContext, object> enrichAction)
         {
             var linkRewriter = new LinkRewriter(_urlHelperFactory.GetUrlHelper(context));
 
             result.Meta = linkRewriter.Rewrite(result.Meta);
+
+            if (result.Forms != null)
+            {
+                foreach (var form in result.Forms)
+                {
+                    enrichAction(context, form);
+                }
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ namespace BeautifulRestApi.Filters
         protected override void OnEnriching(
             ResultExecutingContext context,
             PagedCollection result,
-            Action<ResultExecutingContext, object> enrichChildAction)
+            Action<ResultExecutingContext, object> enrichAction)
         {
             var linkRewriter = new LinkRewriter(_urlHelperFactory.GetUrlHelper(context));
 

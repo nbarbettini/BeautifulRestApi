@@ -7,12 +7,12 @@ namespace BeautifulRestApi.Filters
 {
     public class CollectionEnricher : AbstractResultEnricher<ICollection>
     {
-        protected override void OnEnriching(ResultExecutingContext context, ICollection result, Action<ResultExecutingContext, object> enrichChildAction)
+        protected override void OnEnriching(ResultExecutingContext context, ICollection result, Action<ResultExecutingContext, object> enrichAction)
         {
             var itemsEnumerator = result.GetEnumerator();
             while (itemsEnumerator.MoveNext())
             {
-                enrichChildAction(context, itemsEnumerator.Current);
+                enrichAction(context, itemsEnumerator.Current);
             }
         }
     }

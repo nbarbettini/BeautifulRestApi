@@ -8,9 +8,9 @@ namespace BeautifulRestApi.Filters
         where T : class
     {
         public bool CanEnrich(object result)
-            => CanEnrich(result.GetType());
+            => result != null && CanEnrich(result.GetType());
 
-        public void Enrich(ResultExecutingContext context, object result, Action<ResultExecutingContext, object> enrichChildAction)
+        public void Enrich(ResultExecutingContext context, object result, Action<ResultExecutingContext, object> enrichAction)
         {
             var concrete = result as T;
             if (concrete == null)
@@ -18,10 +18,10 @@ namespace BeautifulRestApi.Filters
                 return;
             }
 
-            OnEnriching(context, concrete, enrichChildAction);
+            OnEnriching(context, concrete, enrichAction);
         }
 
-        protected abstract void OnEnriching(ResultExecutingContext context, T result, Action<ResultExecutingContext, object> enrichChildAction);
+        protected abstract void OnEnriching(ResultExecutingContext context, T result, Action<ResultExecutingContext, object> enrichAction);
 
         private static bool CanEnrich(Type type)
         {

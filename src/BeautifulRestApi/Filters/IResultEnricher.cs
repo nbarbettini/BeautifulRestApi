@@ -7,6 +7,6 @@ namespace BeautifulRestApi.Filters
     {
         bool CanEnrich(object result);
 
-        void Enrich(ResultExecutingContext context, object result, Action<ResultExecutingContext, object> enrichChildAction);
+        void Enrich(ResultExecutingContext context, object result, Action<ResultExecutingContext, object> enrichAction);
     }
 }

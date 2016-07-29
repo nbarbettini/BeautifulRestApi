@@ -39,7 +39,8 @@ namespace BeautifulRestApi.Filters
                 return new Link(href, original.Relations, original.Method);
             }
 
-            return original;
+            var linkHref = _urlHelper.Link("default", new { controller = original.Href });
+            return new Link(linkHref, original.Relations, original.Method);
         }
     }
 }
