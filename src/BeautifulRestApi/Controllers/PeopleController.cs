@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System;
+using System.Dynamic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BeautifulRestApi.Dal;
@@ -9,7 +10,8 @@ using Microsoft.Extensions.Options;
 
 namespace BeautifulRestApi.Controllers
 {
-    public class PeopleController
+    [Route(Endpoint)]
+    public class PeopleController : Controller
     {
         public const string Endpoint = "people";
 
@@ -23,7 +25,6 @@ namespace BeautifulRestApi.Controllers
         }
 
         [HttpGet]
-        [Route(Endpoint)]
         public async Task<IActionResult> Get(PagedCollectionParameters parameters)
         {
             var getAllQuery = new GetAllPeopleQuery(_context, Endpoint, _defaultPagingOptions);
@@ -37,7 +38,7 @@ namespace BeautifulRestApi.Controllers
         }
 
         [HttpGet]
-        [Route(Endpoint + "/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var getQuery = new GetPersonQuery(_context, Endpoint);
@@ -47,6 +48,20 @@ namespace BeautifulRestApi.Controllers
             return person == null
                 ? new NotFoundResult() as ActionResult
                 : new ObjectResult(person);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]PersonCreateModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(); // todo better error
+            }
+
+            var createQuery = new InsertPersonQuery(_context, Endpoint);
+            var person = await createQuery.Execute(model);
+
+            return new CreatedAtRouteResult("default", new { controller = Endpoint, id = (person.Meta as ResourceLink).Id}, person);
         }
 
         private static Form GetPeopleCollectionCreateForm() =>
