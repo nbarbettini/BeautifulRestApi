@@ -44,7 +44,7 @@ namespace BeautifulRestApi
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(LinkRewritingFilter));
-                //options.Filters.Add(typeof(JsonExceptionFilter));
+                options.Filters.Add(typeof(JsonExceptionFilter));
             });
 
             // Add POCO mapping configurations
