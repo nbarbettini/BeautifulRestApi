@@ -23,6 +23,7 @@ namespace BeautifulRestApi.Filters
             var asObjectResult = context.Result as ObjectResult;
             if (asObjectResult == null)
             {
+                await next();
                 return;
             }
 
