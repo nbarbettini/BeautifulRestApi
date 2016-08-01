@@ -11,27 +11,31 @@ namespace BeautifulRestApi.Queries
         private readonly Dal.BeautifulContext _context;
         private readonly PagedCollectionParameters _defaultPagingParameters;
         private readonly string _endpoint;
-        private readonly string _personId;
 
-        public GetOrdersByPersonQuery(Dal.BeautifulContext context, PagedCollectionParameters defaultPagingParameters, string endpoint, string id)
+        public GetOrdersByPersonQuery(Dal.BeautifulContext context, PagedCollectionParameters defaultPagingParameters, string endpoint)
         {
             _context = context;
             _defaultPagingParameters = defaultPagingParameters;
             _endpoint = endpoint;
-            _personId = id;
 
         }
 
-        public Task<PagedCollection<Order>> Execute(string personId, PagedCollectionParameters parameters)
+        public async Task<PagedCollection<Order>> Execute(string personId, PagedCollectionParameters parameters)
         {
-            var meta = PlaceholderLink.ToCollection(_endpoint, values: new { id = _personId, link = OrdersController.Endpoint });
+            var meta = PlaceholderLink.ToCollection(_endpoint, values: new { id = personId, link = OrdersController.Endpoint });
             var collectionFactory = new PagedCollectionFactory<Order>(meta);
+
+            var person = await new GetPersonQuery(_context).Execute(personId);
+            if (person == null)
+            {
+                return null;
+            }
 
             var query = _context.Orders
                 .Where(o => o.PersonId == personId)
                 .ProjectToType<Order>();
 
-            return collectionFactory.CreateFrom(query,
+            return await collectionFactory.CreateFrom(query,
                 parameters.Offset ?? _defaultPagingParameters.Offset.Value,
                 parameters.Limit ?? _defaultPagingParameters.Limit.Value);
         }
