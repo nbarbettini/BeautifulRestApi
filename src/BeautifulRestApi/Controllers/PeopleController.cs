@@ -51,7 +51,7 @@ namespace BeautifulRestApi.Controllers
         [Route("{id}/orders")]
         public async Task<IActionResult> GetOrders(string id, PagedCollectionParameters parameters)
         {
-            var getOrdersByPersonQuery = new GetOrdersByPersonQuery(_context, Endpoint, _defaultPagingOptions);
+            var getOrdersByPersonQuery = new GetOrdersByPersonQuery(_context, _defaultPagingOptions, Endpoint, id);
 
             return new ObjectResult(await getOrdersByPersonQuery.Execute(id, parameters));
         }

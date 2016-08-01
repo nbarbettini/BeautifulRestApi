@@ -7,11 +7,11 @@ namespace BeautifulRestApi.Models
 {
     public class PagedCollectionFactory<T>
     {
-        private readonly string _endpoint;
+        private readonly ILink _meta;
 
-        public PagedCollectionFactory(string endpoint)
+        public PagedCollectionFactory(ILink meta)
         {
-            _endpoint = endpoint;
+            _meta = meta;
         }
 
         public async Task<PagedCollection<T>> CreateFrom(IQueryable<T> queryable, int offset, int limit)
@@ -25,9 +25,9 @@ namespace BeautifulRestApi.Models
 
             return new PagedCollection<T>()
             {
-                Meta = PlaceholderLink.ToCollection(_endpoint),
+                Meta = _meta,
                 Items = items,
-                First = PlaceholderLink.ToCollection(_endpoint),
+                First = GetFirstLink(),
                 Last = GetLastLink(count, limit),
                 Next = GetNextLink(count, offset, limit),
                 Previous = GetPreviousLink(count, offset, limit),
@@ -37,20 +37,23 @@ namespace BeautifulRestApi.Models
             };
         }
 
+        private ILink GetFirstLink()
+            => new PlaceholderLink(_meta);
+
         private ILink GetLastLink(int size, int limit)
         {
             if (size <= limit)
             {
-                return PlaceholderLink.ToCollection(_endpoint);
+                return GetFirstLink();
             }
 
-            var routeValues = new
-            {
-                limit,
-                offset = Math.Ceiling((size - (double) limit)/limit) * limit
-            };
+            var offset = Math.Ceiling((size - (double) limit)/limit)*limit;
 
-            return PlaceholderLink.ToCollection(_endpoint, values: routeValues);
+            var newLink = new PlaceholderLink(_meta);
+            newLink.Values.Add("limit", limit);
+            newLink.Values.Add("offset", offset);
+
+            return newLink;
         }
 
         private ILink GetNextLink(int size, int offset, int limit)
@@ -68,7 +71,8 @@ namespace BeautifulRestApi.Models
                 offset = nextPage
             };
 
-            return PlaceholderLink.ToCollection(_endpoint, values: routeValues);
+            return null; // todo
+            //return PlaceholderLink.ToCollection(_endpoint, values: routeValues);
         }
 
         private ILink GetPreviousLink(int size, int offset, int limit)
@@ -87,7 +91,7 @@ namespace BeautifulRestApi.Models
 
             if (previousPage <= 0)
             {
-                return PlaceholderLink.ToCollection(_endpoint);
+                return GetFirstLink();
             }
 
             var routeValues = new
@@ -96,7 +100,8 @@ namespace BeautifulRestApi.Models
                 offset = previousPage
             };
 
-            return PlaceholderLink.ToCollection(_endpoint, values: routeValues);
+            return null; // todo
+            //return PlaceholderLink.ToCollection(_endpoint, values: routeValues);
         }
     }
 }

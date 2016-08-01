@@ -20,7 +20,7 @@ namespace BeautifulRestApi.Queries
 
         public Task<PagedCollection<Person>> Execute(PagedCollectionParameters parameters)
         {
-            var collectionFactory = new PagedCollectionFactory<Person>(_endpoint);
+            var collectionFactory = new PagedCollectionFactory<Person>(PlaceholderLink.ToCollection(_endpoint));
 
             return collectionFactory.CreateFrom(
                 _context.People.ProjectToType<Person>(),

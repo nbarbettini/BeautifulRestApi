@@ -12,7 +12,7 @@ namespace BeautifulRestApi
                 .MapWith(src => new Person
                 {
                     Meta = PlaceholderLink.ToResource(PeopleController.Endpoint, src.Id, "GET", null),
-                    Orders = PlaceholderLink.ToCollection($"{PeopleController.Endpoint}/{src.Id}/orders", "GET", null),
+                    Orders = PlaceholderLink.ToCollection(PeopleController.Endpoint, "GET", new { id = src.Id, link = OrdersController.Endpoint }),
                     FirstName = src.FirstName,
                     LastName = src.LastName,
                     BirthDate = src.BirthDate

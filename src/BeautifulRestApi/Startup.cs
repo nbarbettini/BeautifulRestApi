@@ -70,7 +70,7 @@ namespace BeautifulRestApi
 
             app.UseMvc(opt =>
             {
-                opt.MapRoute("default", "{controller}/{id?}");
+                opt.MapRoute("default", "{controller}/{id?}/{link?}");
             });
         }
     }
