@@ -10,8 +10,8 @@ namespace BeautifulRestApi.Dal
         {
         }
 
-        public DbSet<Person> People { get; set; }
+        public DbSet<User> Users { get; set; }
 
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<Post> Posts { get; set; }
     }
 }

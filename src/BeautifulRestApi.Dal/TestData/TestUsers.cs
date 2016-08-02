@@ -5,11 +5,11 @@ using BeautifulRestApi.Dal.DbModels;
 
 namespace BeautifulRestApi.Dal.TestData
 {
-    public class TestPeople : AbstractTestData<Person>
+    public class TestUsers : AbstractTestData<User>
     {
-        public TestPeople(int numberOfPeople)
+        public TestUsers(int numberOfUsers)
         {
-            Data = Generate().Take(numberOfPeople).ToArray();
+            Data = Generate().Take(numberOfUsers).ToArray();
         }
 
         private static readonly string[] GivenNames =
@@ -22,13 +22,13 @@ namespace BeautifulRestApi.Dal.TestData
             "Smith", "Testerman", "Johnson", "Jones", "Garcia", "Cole", "Lee"
         };
 
-        private static IEnumerable<Person> Generate()
+        private static IEnumerable<User> Generate()
         {
             var random = new Random();
 
             while (true)
             {
-                yield return new Person {
+                yield return new User {
                     Id = IdGenerator.GetId(),
                     FirstName = GivenNames[random.Next(GivenNames.Length - 1)],
                     LastName = Surnames[random.Next(Surnames.Length - 1)],

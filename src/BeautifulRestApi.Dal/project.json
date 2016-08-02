@@ -2,6 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
+    "Lorem.DNX.Net": "1.0.34",
     "Microsoft.EntityFrameworkCore": "1.0.0",
     "NETStandard.Library": "1.6.0"
   },

@@ -6,22 +6,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeautifulRestApi.Queries
 {
-    public class GetPersonQuery
+    public class GetUserQuery
     {
         private readonly BeautifulContext _context;
 
-        public GetPersonQuery(BeautifulContext context)
+        public GetUserQuery(BeautifulContext context)
         {
             _context = context;
         }
 
-        public async Task<Person> Execute(string id)
+        public async Task<User> Execute(string id)
         {
-            var p = await _context.People.SingleOrDefaultAsync(x => x.Id == id);
+            var p = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
 
             return p == null
                 ? null
-                : p.Adapt<Person>();
+                : p.Adapt<User>();
         }
     }
 }

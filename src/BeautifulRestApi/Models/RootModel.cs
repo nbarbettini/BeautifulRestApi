@@ -4,8 +4,8 @@ namespace BeautifulRestApi.Models
 {
     public class RootModel
     {
-        public ILink People { get; set; } = PlaceholderLink.ToCollection(PeopleController.Endpoint);
+        public ILink Users { get; set; } = PlaceholderLink.ToCollection(UsersController.Endpoint);
         
-        public ILink Orders { get; set; } = PlaceholderLink.ToCollection(OrdersController.Endpoint);
+        public ILink Posts { get; set; } = PlaceholderLink.ToCollection(PostsController.Endpoint);
     }
 }

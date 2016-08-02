@@ -2,7 +2,7 @@
 
 namespace BeautifulRestApi.Models
 {
-    public class Person : Resource
+    public class User : Resource
     {
         public string FirstName { get; set; }
 
@@ -10,6 +10,6 @@ namespace BeautifulRestApi.Models
 
         public DateTimeOffset? BirthDate { get; set; }
 
-        public ILink Orders { get; set; }
+        public ILink Posts { get; set; }
     }
 }

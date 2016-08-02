@@ -11,19 +11,20 @@ using Microsoft.Extensions.Options;
 namespace BeautifulRestApi.Controllers
 {
     [Route(Endpoint)]
-    public class OrdersController : Controller
+    public class PostsController : Controller
     {
-        public const string Endpoint = "orders";
+        public const string Endpoint = "posts";
 
         private readonly BeautifulContext _context;
         private readonly PagedCollectionParameters _defaultPagingOptions;
 
-        public OrdersController(BeautifulContext context, IOptions<PagedCollectionParameters> defaultPagingOptions)
+        public PostsController(BeautifulContext context, IOptions<PagedCollectionParameters> defaultPagingOptions)
         {
             _context = context;
             _defaultPagingOptions = defaultPagingOptions.Value;
         }
 
+        // todo
         //[HttpGet]
         //public async Task<IActionResult> Get(PagedCollectionParameters parameters)
         //{
@@ -40,13 +41,12 @@ namespace BeautifulRestApi.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var getQuery = new GetOrderQuery(_context);
-            var order = await getQuery.Execute(id);
+            var query = new GetPostQuery(_context);
+            var post = await query.Execute(id);
 
-            return order == null
+            return post == null
                 ? new NotFoundResult() as ActionResult
-                : new ObjectResult(order);
+                : new ObjectResult(post);
         }
-
     }
 }

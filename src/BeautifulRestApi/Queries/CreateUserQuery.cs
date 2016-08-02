@@ -6,18 +6,18 @@ using Mapster;
 
 namespace BeautifulRestApi.Queries
 {
-    public class InsertPersonQuery
+    public class CreateUserQuery
     {
         private readonly BeautifulContext _context;
 
-        public InsertPersonQuery(BeautifulContext context)
+        public CreateUserQuery(BeautifulContext context)
         {
             _context = context;
         }
 
-        public async Task<Tuple<string, Person>> Execute(PersonCreateModel model)
+        public async Task<Tuple<string, User>> Execute(UserCreateModel model)
         {
-            var entry = _context.People.Add(new Dal.DbModels.Person
+            var entry = _context.Users.Add(new Dal.DbModels.User
             {
                 Id = Dal.IdGenerator.GetId(),
                 FirstName = model.FirstName,
@@ -27,9 +27,9 @@ namespace BeautifulRestApi.Queries
 
             await _context.SaveChangesAsync();
 
-            return new Tuple<string, Person>(
+            return new Tuple<string, User>(
                 entry.Entity.Id,
-                entry.Entity.Adapt<Person>());
+                entry.Entity.Adapt<User>());
         }
     }
 }

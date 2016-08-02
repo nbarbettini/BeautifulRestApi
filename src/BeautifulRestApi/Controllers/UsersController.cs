@@ -10,14 +10,14 @@ using Microsoft.Extensions.Options;
 namespace BeautifulRestApi.Controllers
 {
     [Route(Endpoint)]
-    public class PeopleController : Controller
+    public class UsersController : Controller
     {
-        public const string Endpoint = "people";
+        public const string Endpoint = "users";
 
         private readonly BeautifulContext _context;
         private readonly PagedCollectionParameters _defaultPagingOptions;
 
-        public PeopleController(BeautifulContext context, IOptions<PagedCollectionParameters> defaultPagingOptions)
+        public UsersController(BeautifulContext context, IOptions<PagedCollectionParameters> defaultPagingOptions)
         {
             _context = context;
             _defaultPagingOptions = defaultPagingOptions.Value;
@@ -26,11 +26,11 @@ namespace BeautifulRestApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(PagedCollectionParameters parameters)
         {
-            var getAllQuery = new GetAllPeopleQuery(_context, Endpoint, _defaultPagingOptions);
+            var getAllQuery = new GetAllUsersQuery(_context, Endpoint, _defaultPagingOptions);
             var results = await getAllQuery.Execute(parameters);
 
             // Attach form definitions for discoverability
-            results.Forms = new[] {Form.FromModel<PersonCreateModel>(Endpoint, "POST", "create-form")};
+            results.Forms = new[] {Form.FromModel<UserCreateModel>(Endpoint, "POST", "create-form")};
 
             return new ObjectResult(results);
         }
@@ -39,28 +39,28 @@ namespace BeautifulRestApi.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var getQuery = new GetPersonQuery(_context);
-            var person = await getQuery.Execute(id);
+            var getQuery = new GetUserQuery(_context);
+            var user = await getQuery.Execute(id);
 
-            return person == null
+            return user == null
                 ? new NotFoundResult() as ActionResult
-                : new ObjectResult(person);
+                : new ObjectResult(user);
         }
 
         [HttpGet]
-        [Route("{id}/orders")]
-        public async Task<IActionResult> GetOrders(string id, PagedCollectionParameters parameters)
+        [Route("{id}/posts")]
+        public async Task<IActionResult> GetPosts(string id, PagedCollectionParameters parameters)
         {
-            var getOrdersByPersonQuery = new GetOrdersByPersonQuery(_context, _defaultPagingOptions, Endpoint);
-            var orders = await getOrdersByPersonQuery.Execute(id, parameters);
+            var query = new GetPostsByUserQuery(_context, _defaultPagingOptions, Endpoint);
+            var posts = await query.Execute(id, parameters);
 
-            return orders == null
+            return posts == null
                 ? new NotFoundResult() as ActionResult
-                : new ObjectResult(orders);
+                : new ObjectResult(posts);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]PersonCreateModel model)
+        public async Task<IActionResult> Post([FromBody]UserCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -71,10 +71,10 @@ namespace BeautifulRestApi.Controllers
                 });
             }
 
-            var createQuery = new InsertPersonQuery(_context);
-            var person = await createQuery.Execute(model);
+            var createQuery = new CreateUserQuery(_context);
+            var user = await createQuery.Execute(model);
 
-            return new CreatedAtRouteResult("default", new { controller = Endpoint, id = person.Item1}, person.Item2);
+            return new CreatedAtRouteResult("default", new { controller = Endpoint, id = user.Item1}, user.Item2);
         }
     }
 }

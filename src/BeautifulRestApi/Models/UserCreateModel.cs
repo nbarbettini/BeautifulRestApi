@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BeautifulRestApi.Models
 {
-    public class PersonCreateModel
+    public class UserCreateModel
     {
         [Required]
         [Display(Name = "firstName")]

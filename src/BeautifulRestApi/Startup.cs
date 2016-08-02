@@ -44,7 +44,7 @@ namespace BeautifulRestApi
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(LinkRewritingFilter));
-                options.Filters.Add(typeof(JsonExceptionFilter));
+                //options.Filters.Add(typeof(JsonExceptionFilter)); // todo
             });
 
             // Add POCO mapping configurations
@@ -60,11 +60,11 @@ namespace BeautifulRestApi
             // Seed data store with test data
             var context = app.ApplicationServices.GetService<BeautifulContext>();
             
-            var fakePeople = new TestPeople(26);
-            var fakeOrders = new TestOrders(100, fakePeople.Data.Select(p => p.Id).ToArray());
+            var fakeUsers = new TestUsers(26);
+            var fakePosts = new TestPosts(100, fakeUsers.Data.Select(p => p.Id).ToArray());
 
-            fakePeople.Seed(context.People);
-            fakeOrders.Seed(context.Orders);
+            fakeUsers.Seed(context.Users);
+            fakePosts.Seed(context.Posts);
 
             context.SaveChanges();
 

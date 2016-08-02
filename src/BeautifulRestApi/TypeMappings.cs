@@ -8,23 +8,23 @@ namespace BeautifulRestApi
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.ForType<Dal.DbModels.Person, Person>()
-                .MapWith(src => new Person
+            config.ForType<Dal.DbModels.User, User>()
+                .MapWith(src => new User
                 {
-                    Meta = PlaceholderLink.ToResource(PeopleController.Endpoint, src.Id, "GET", null),
-                    Orders = PlaceholderLink.ToCollection(PeopleController.Endpoint, "GET", new { id = src.Id, link = OrdersController.Endpoint }),
+                    Meta = PlaceholderLink.ToResource(UsersController.Endpoint, src.Id, "GET", null),
+                    Posts = PlaceholderLink.ToCollection(UsersController.Endpoint, "GET", new { id = src.Id, link = PostsController.Endpoint }),
                     FirstName = src.FirstName,
                     LastName = src.LastName,
                     BirthDate = src.BirthDate
                 });
 
-            config.ForType<Dal.DbModels.Order, Order>()
-                .MapWith(src => new Order
+            config.ForType<Dal.DbModels.Post, Post>()
+                .MapWith(src => new Post
                 {
-                    Meta = PlaceholderLink.ToResource(OrdersController.Endpoint, src.Id, "GET", null),
-                    Person = PlaceholderLink.ToResource(PeopleController.Endpoint, src.PersonId, "GET", null),
+                    Meta = PlaceholderLink.ToResource(PostsController.Endpoint, src.Id, "GET", null),
+                    User = PlaceholderLink.ToResource(UsersController.Endpoint, src.UserId, "GET", null),
                     CreatedAt = src.CreatedAt,
-                    Total = src.Total
+                    Content = src.Content
                 });
         }
     }

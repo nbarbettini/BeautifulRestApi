@@ -5,25 +5,25 @@ using Mapster;
 
 namespace BeautifulRestApi.Queries
 {
-    public class GetAllPeopleQuery
+    public class GetAllUsersQuery
     {
         private readonly BeautifulContext _context;
         private readonly string _endpoint;
         private readonly PagedCollectionParameters _defaultPagingParameters;
 
-        public GetAllPeopleQuery(BeautifulContext context, string endpoint, PagedCollectionParameters defaultPagingParameters)
+        public GetAllUsersQuery(BeautifulContext context, string endpoint, PagedCollectionParameters defaultPagingParameters)
         {
             _context = context;
             _endpoint = endpoint;
             _defaultPagingParameters = defaultPagingParameters;
         }
 
-        public Task<PagedCollection<Person>> Execute(PagedCollectionParameters parameters)
+        public Task<PagedCollection<User>> Execute(PagedCollectionParameters parameters)
         {
-            var collectionFactory = new PagedCollectionFactory<Person>(PlaceholderLink.ToCollection(_endpoint));
+            var collectionFactory = new PagedCollectionFactory<User>(PlaceholderLink.ToCollection(_endpoint));
 
             return collectionFactory.CreateFrom(
-                _context.People.ProjectToType<Person>(),
+                _context.Users.ProjectToType<User>(),
                 parameters.Offset ?? _defaultPagingParameters.Offset.Value,
                 parameters.Limit ?? _defaultPagingParameters.Limit.Value);
         }

@@ -5,24 +5,24 @@ using BeautifulRestApi.Dal.DbModels;
 
 namespace BeautifulRestApi.Dal.TestData
 {
-    public class TestOrders : AbstractTestData<Order>
+    public class TestPosts : AbstractTestData<Post>
     {
-        public TestOrders(int numberOfOrders, string[] personIds)
+        public TestPosts(int numberOfPosts, IReadOnlyList<string> userIds)
         {
-            Data = Generate(personIds).Take(numberOfOrders).ToArray();
+            Data = Generate(userIds).Take(numberOfPosts).ToArray();
         }
 
-        private static IEnumerable<Order> Generate(string[] personIds)
+        private static IEnumerable<Post> Generate(IReadOnlyList<string> userIds)
         {
             var random = new Random();
 
             while (true)
             {
-                yield return new Order
+                yield return new Post
                 {
                     Id = IdGenerator.GetId(),
-                    PersonId = personIds[random.Next(0, personIds.Length - 1)],
-                    Total = Math.Round(random.NextDouble() * 500, 2),
+                    UserId = userIds[random.Next(0, userIds.Count - 1)],
+                    Content = LoremNET.Lorem.Sentence(random.Next(15)),
                     CreatedAt = new DateTimeOffset(
                         year: random.Next(2000, DateTimeOffset.Now.Year),
                         month: random.Next(1, 12),

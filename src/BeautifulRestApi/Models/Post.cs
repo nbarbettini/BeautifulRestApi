@@ -2,11 +2,11 @@
 
 namespace BeautifulRestApi.Models
 {
-    public class Order : Resource
+    public class Post : Resource
     {
-        public ILink Person { get; set; }
+        public ILink User { get; set; }
 
-        public double Total { get; set; }
+        public string Content { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }
     }
