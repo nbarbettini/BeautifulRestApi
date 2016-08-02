@@ -26,7 +26,7 @@ namespace BeautifulRestApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(PagedCollectionParameters parameters)
         {
-            var getAllQuery = new GetAllUsersQuery(_context, Endpoint, _defaultPagingOptions);
+            var getAllQuery = new GetAllUsersQuery(_context, _defaultPagingOptions, Endpoint);
             var results = await getAllQuery.Execute(parameters);
 
             // Attach form definitions for discoverability

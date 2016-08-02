@@ -27,24 +27,23 @@ namespace BeautifulRestApi.Queries
             var meta = PlaceholderLink.ToCollection(_endpoint, values: new { id = userId, link = PostsController.Endpoint });
             var collectionFactory = new PagedCollectionFactory<Post>(meta);
 
-            var user = await _context.Users.Where(u => u.Id == userId).SingleOrDefaultAsync();
+            var user = await _context.Users
+                .Where(x => x.Id == userId)
+                .SingleOrDefaultAsync();
 
             if (user == null)
             {
                 return null;
             }
 
-            // todo
-            throw new NotImplementedException();
+            var query = _context.Posts
+                .Where(o => o.UserId == userId)
+                .ProjectToType<Post>();
 
-            //var query = _context.Orders
-            //    .Where(o => o.PersonId == userId)
-            //    .ProjectToType<Post>();
-
-            //return await collectionFactory.CreateFrom(
-            //    person.,
-            //    parameters.Offset ?? _defaultPagingParameters.Offset.Value,
-            //    parameters.Limit ?? _defaultPagingParameters.Limit.Value);
+            return await collectionFactory.CreateFrom(
+                person.,
+                parameters.Offset ?? _defaultPagingParameters.Offset.Value,
+                parameters.Limit ?? _defaultPagingParameters.Limit.Value);
         }
     }
 }

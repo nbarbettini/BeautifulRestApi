@@ -24,18 +24,17 @@ namespace BeautifulRestApi.Controllers
             _defaultPagingOptions = defaultPagingOptions.Value;
         }
 
-        // todo
-        //[HttpGet]
-        //public async Task<IActionResult> Get(PagedCollectionParameters parameters)
-        //{
-        //    var getAllQuery = new GetAllOrdersQuery(_context, Endpoint, _defaultPagingOptions);
-        //    var results = await getAllQuery.Execute(parameters);
+        [HttpGet]
+        public async Task<IActionResult> Get(PagedCollectionParameters parameters)
+        {
+            var getAllQuery = new GetAllPostsQuery(_context, _defaultPagingOptions, Endpoint);
+            var results = await getAllQuery.Execute(parameters);
 
-        //    // Attach form definitions for discoverability
-        //    results.Forms = new[] { Form.FromModel<PersonCreateModel>(Endpoint, "POST", "create-form") };
+            // Attach form definitions for discoverability
+            //results.Forms = new[] { Form.FromModel<PersonCreateModel>(Endpoint, "POST", "create-form") };
 
-        //    return new ObjectResult(results);
-        //}
+            return new ObjectResult(results);
+        }
 
         [HttpGet]
         [Route("{id}")]

@@ -17,11 +17,11 @@ namespace BeautifulRestApi.Queries
 
         public async Task<User> Execute(string id)
         {
-            var p = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
 
-            return p == null
+            return user == null
                 ? null
-                : p.Adapt<User>();
+                : user.Adapt<User>();
         }
     }
 }
