@@ -31,7 +31,7 @@ namespace BeautifulRestApi.Controllers
             var results = await getAllQuery.Execute(parameters);
 
             // Attach form definitions for discoverability
-            //results.Forms = new[] { Form.FromModel<PersonCreateModel>(Endpoint, "POST", "create-form") };
+            results.Forms = new[] { Form.FromModel<PostCreateModel>(Endpoint, "POST", "create-form") };
 
             return new ObjectResult(results);
         }
@@ -46,6 +46,23 @@ namespace BeautifulRestApi.Controllers
             return post == null
                 ? new NotFoundResult() as ActionResult
                 : new ObjectResult(post);
+        }
+
+        public async Task<IActionResult> Post([FromBody] PostCreateModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = ModelState.Values.First().Errors.First().ErrorMessage
+                });
+            }
+
+            var createQuery = new CreatePostQuery(_context);
+            var post = await createQuery.Execute(model);
+
+            return new CreatedAtRouteResult("default", new { controller = Endpoint, id = post.Item1 }, post.Item2);
         }
     }
 }
