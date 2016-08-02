@@ -61,7 +61,7 @@ namespace BeautifulRestApi
             var context = app.ApplicationServices.GetService<BeautifulContext>();
             
             var fakeUsers = new TestUsers(26);
-            var fakePosts = new TestPosts(100, fakeUsers.Data.Select(p => p.Id).ToArray());
+            var fakePosts = new TestPosts(100, fakeUsers.Data.Select(x => x.Id).ToArray());
 
             fakeUsers.Seed(context.Users);
             fakePosts.Seed(context.Posts);

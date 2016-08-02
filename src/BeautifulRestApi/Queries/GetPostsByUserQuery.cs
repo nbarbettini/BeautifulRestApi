@@ -41,7 +41,7 @@ namespace BeautifulRestApi.Queries
                 .ProjectToType<Post>();
 
             return await collectionFactory.CreateFrom(
-                person.,
+                query,
                 parameters.Offset ?? _defaultPagingParameters.Offset.Value,
                 parameters.Limit ?? _defaultPagingParameters.Limit.Value);
         }
