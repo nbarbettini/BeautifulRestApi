@@ -65,14 +65,11 @@ namespace BeautifulRestApi.Models
                 return null;
             }
 
-            var routeValues = new
-            {
-                limit,
-                offset = nextPage
-            };
+            var newLink = new PlaceholderLink(_meta);
+            newLink.Values.Add("limit", limit);
+            newLink.Values.Add("offset", nextPage);
 
-            return null; // todo
-            //return PlaceholderLink.ToCollection(_endpoint, values: routeValues);
+            return newLink;
         }
 
         private ILink GetPreviousLink(int size, int offset, int limit)
@@ -94,14 +91,11 @@ namespace BeautifulRestApi.Models
                 return GetFirstLink();
             }
 
-            var routeValues = new
-            {
-                limit,
-                offset = previousPage
-            };
+            var newLink = new PlaceholderLink(_meta);
+            newLink.Values.Add("limit", limit);
+            newLink.Values.Add("offset", previousPage);
 
-            return null; // todo
-            //return PlaceholderLink.ToCollection(_endpoint, values: routeValues);
+            return newLink;
         }
     }
 }
