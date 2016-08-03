@@ -21,24 +21,27 @@ namespace BeautifulRestApi.Controllers
             _defaultPagingOptions = defaultPagingOptions.Value;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get(PagedCollectionParameters parameters)
-        {
-            var getAllQuery = new GetAllPostsQuery(_context, _defaultPagingOptions, Endpoint);
-            var results = await getAllQuery.Execute(parameters);
+        //[HttpGet]
+        //public async Task<IActionResult> Get(PagedCollectionParameters parameters)
+        //{
+        //    var getAllQuery = new GetAllPosts(_context, _defaultPagingOptions, Endpoint);
+        //    var results = await getAllQuery.Execute(parameters);
 
-            // Attach form definitions for discoverability
-            results.Forms = new[] { Form.FromModel<PostCreateModel>(Endpoint, "POST", "create-form") };
+        //    // Attach form definitions for discoverability
+        //    results.Forms = new[] { Form.FromModel<PostCreateModel>(Endpoint, "POST", "create-form") };
 
-            return new ObjectResult(results);
-        }
+        //    return new ObjectResult(results);
+        //}
 
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var query = new GetPostQuery(_context);
-            var post = await query.Execute(id);
+            var executor = new QueryExecutor(_context);
+
+            var post = await executor.ExecuteAsync(
+                new GetPost {PostId = id},
+                new ProjectPost());
 
             return post == null
                 ? new NotFoundResult() as ActionResult

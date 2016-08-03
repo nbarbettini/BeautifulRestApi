@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeautifulRestApi.Queries
 {
-    public class GetUserQuery2 : QueryBase<DbUser>
+    public class GetUser : QueryBase<DbUser>
     {
         public string Id { get; set; }
 

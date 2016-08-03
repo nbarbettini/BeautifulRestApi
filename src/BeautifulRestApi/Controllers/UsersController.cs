@@ -24,11 +24,18 @@ namespace BeautifulRestApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(PagedCollectionParameters parameters)
         {
-            var getAllQuery = new GetAllUsersQuery(_context, _defaultPagingOptions, Endpoint);
-            var results = await getAllQuery.Execute(parameters);
+            var executor = new QueryExecutor(_context);
+            var results = await executor.ExecuteAsync(
+                new GetAllUsers(),
+                new ProjectToPagedCollection<DbModels.DbUser, User>()
+                {
+                    Meta = PlaceholderLink.ToCollection(Endpoint),
+                    DefaultPagingParameters = _defaultPagingOptions,
+                    PagingParameters = parameters
+                });
 
             // Attach form definitions for discoverability
-            results.Forms = new[] {Form.FromModel<UserCreateModel>(Endpoint, "POST", "create-form")};
+            results.Forms = new[] { Form.FromModel<UserCreateModel>(Endpoint, "POST", "create-form") };
 
             return new ObjectResult(results);
         }
@@ -37,7 +44,7 @@ namespace BeautifulRestApi.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var getUserQuery = new GetUserQuery2 {Id = id};
+            var getUserQuery = new GetUser {Id = id};
             var executor = new QueryExecutor(_context);
 
             var user = await executor.ExecuteAsync(getUserQuery, new ProjectUser());
@@ -51,12 +58,18 @@ namespace BeautifulRestApi.Controllers
         [Route("{id}/posts")]
         public async Task<IActionResult> GetPosts(string id, PagedCollectionParameters parameters)
         {
-            var query = new GetPostsByUserQuery(_context, _defaultPagingOptions, Endpoint);
-            var posts = await query.Execute(id, parameters);
+            var executor = new QueryExecutor(_context);
 
-            return posts == null
-                ? new NotFoundResult() as ActionResult
-                : new ObjectResult(posts);
+            var posts = await executor.ExecuteAsync(
+                new GetPostsByUser {UserId = id},
+                new ProjectToPagedCollection<DbModels.DbPost, Post>()
+                {
+                    Meta = PlaceholderLink.ToCollection(Endpoint, values: new { id, link = PostsController.Endpoint }),
+                    DefaultPagingParameters = _defaultPagingOptions,
+                    PagingParameters = parameters
+                });
+
+            return new ObjectResult(posts);
         }
 
         [HttpPost]

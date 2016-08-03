@@ -7,9 +7,12 @@ namespace BeautifulRestApi.Queries
     {
         public BeautifulContext Context { get; private set; }
 
-        public void Initialize(BeautifulContext context)
+        public QueryExecutor Executor { get; private set; }
+
+        public void Initialize(BeautifulContext context, QueryExecutor executor)
         {
             Context = context;
+            Executor = executor;
         }
 
         public abstract Task<T> ExecuteAsync(CancellationToken cancellationToken = new CancellationToken());

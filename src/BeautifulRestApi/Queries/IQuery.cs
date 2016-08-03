@@ -5,7 +5,7 @@ namespace BeautifulRestApi.Queries
 {
     public interface IQuery<T>
     {
-        void Initialize(BeautifulContext context);
+        void Initialize(BeautifulContext context, QueryExecutor executor);
 
         Task<T> ExecuteAsync(CancellationToken cancellationToken = default(CancellationToken));
     }

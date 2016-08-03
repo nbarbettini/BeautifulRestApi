@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BeautifulRestApi.Queries
@@ -15,7 +16,7 @@ namespace BeautifulRestApi.Queries
         public Task<TResult> ExecuteAsync<TResult>(IQuery<TResult> query,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            query.Initialize(_context);
+            query.Initialize(_context, this);
 
             return query.ExecuteAsync(cancellationToken);
         }
