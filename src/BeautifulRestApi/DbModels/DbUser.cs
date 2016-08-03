@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BeautifulRestApi.Dal.DbModels
+namespace BeautifulRestApi.DbModels
 {
-    public class User
+    public class DbUser
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = IdGenerator.NewId();
 
         public string FirstName { get; set; }
 
@@ -13,6 +13,6 @@ namespace BeautifulRestApi.Dal.DbModels
 
         public DateTimeOffset? BirthDate { get; set; }
 
-        public List<Post> Posts { get; set; }
+        public List<DbPost> Posts { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BeautifulRestApi.Controllers;
+using BeautifulRestApi.DbModels;
 using BeautifulRestApi.Models;
 using Mapster;
 
@@ -8,7 +9,7 @@ namespace BeautifulRestApi
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.ForType<Dal.DbModels.User, User>()
+            config.ForType<DbUser, User>()
                 .MapWith(src => new User
                 {
                     Meta = PlaceholderLink.ToResource(UsersController.Endpoint, src.Id, "GET", null),
@@ -18,7 +19,7 @@ namespace BeautifulRestApi
                     BirthDate = src.BirthDate
                 });
 
-            config.ForType<Dal.DbModels.Post, Post>()
+            config.ForType<DbPost, Post>()
                 .MapWith(src => new Post
                 {
                     Meta = PlaceholderLink.ToResource(PostsController.Endpoint, src.Id, "GET", null),

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BeautifulRestApi.Dal
+namespace BeautifulRestApi
 {
     public static class IdGenerator
     {

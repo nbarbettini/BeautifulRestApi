@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using BeautifulRestApi.Controllers;
 using BeautifulRestApi.Models;
@@ -10,11 +9,11 @@ namespace BeautifulRestApi.Queries
 {
     public class GetPostsByUserQuery
     {
-        private readonly Dal.BeautifulContext _context;
+        private readonly BeautifulContext _context;
         private readonly PagedCollectionParameters _defaultPagingParameters;
         private readonly string _endpoint;
 
-        public GetPostsByUserQuery(Dal.BeautifulContext context, PagedCollectionParameters defaultPagingParameters, string endpoint)
+        public GetPostsByUserQuery(BeautifulContext context, PagedCollectionParameters defaultPagingParameters, string endpoint)
         {
             _context = context;
             _defaultPagingParameters = defaultPagingParameters;

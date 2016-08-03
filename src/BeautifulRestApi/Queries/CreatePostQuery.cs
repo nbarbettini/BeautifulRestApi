@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BeautifulRestApi.Dal;
+using BeautifulRestApi.DbModels;
 using BeautifulRestApi.Models;
 using Mapster;
 
@@ -17,9 +17,8 @@ namespace BeautifulRestApi.Queries
 
         public async Task<Tuple<string, Post>> Execute(PostCreateModel model)
         {
-            var entry = _context.Posts.Add(new Dal.DbModels.Post
+            var entry = _context.Posts.Add(new DbPost
             {
-                Id = Dal.IdGenerator.NewId(),
                 UserId = model.UserId,
                 CreatedAt = DateTimeOffset.UtcNow,
                 Content = model.Content

@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
@@ -19,9 +18,7 @@ namespace BeautifulRestApi.Queries
         {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
 
-            return user == null
-                ? null
-                : user.Adapt<User>();
+            return user?.Adapt<User>();
         }
     }
 }

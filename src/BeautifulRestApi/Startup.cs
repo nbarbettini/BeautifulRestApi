@@ -1,8 +1,5 @@
 ﻿using System.Linq;
 using System.Reflection;
-using BeautifulRestApi.Controllers;
-using BeautifulRestApi.Dal;
-using BeautifulRestApi.Dal.TestData;
 using BeautifulRestApi.Filters;
 using BeautifulRestApi.Models;
 using Mapster;
@@ -60,8 +57,8 @@ namespace BeautifulRestApi
             // Seed data store with test data
             var context = app.ApplicationServices.GetService<BeautifulContext>();
             
-            var fakeUsers = new TestUsers(26);
-            var fakePosts = new TestPosts(100, fakeUsers.Data.Select(x => x.Id).ToArray());
+            var fakeUsers = new TestData.TestUsers(26);
+            var fakePosts = new TestData.TestPosts(100, fakeUsers.Data.Select(x => x.Id).ToArray());
 
             fakeUsers.Seed(context.Users);
             fakePosts.Seed(context.Posts);
@@ -73,5 +70,7 @@ namespace BeautifulRestApi
                 opt.MapRoute("default", "{controller}/{id?}/{link?}");
             });
         }
+
+
     }
 }

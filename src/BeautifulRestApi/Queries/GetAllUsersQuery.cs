@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
 using Mapster;
 

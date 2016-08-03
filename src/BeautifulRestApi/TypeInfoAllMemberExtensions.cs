@@ -4,6 +4,7 @@ using System.Reflection;
 
 namespace BeautifulRestApi
 {
+    //todo remove?
     public static class TypeInfoAllMemberExtensions
     {
         public static IEnumerable<ConstructorInfo> GetAllConstructors(this TypeInfo typeInfo)

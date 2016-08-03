@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
 using BeautifulRestApi.Queries;
 using Microsoft.AspNetCore.Mvc;

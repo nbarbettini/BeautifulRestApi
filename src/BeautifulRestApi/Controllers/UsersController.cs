@@ -1,9 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using BeautifulRestApi.Dal;
 using BeautifulRestApi.Models;
 using BeautifulRestApi.Queries;
-using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
