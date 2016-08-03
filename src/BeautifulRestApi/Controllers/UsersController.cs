@@ -37,8 +37,10 @@ namespace BeautifulRestApi.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var getQuery = new GetUserQuery(_context);
-            var user = await getQuery.Execute(id);
+            var getUserQuery = new GetUserQuery2 {Id = id};
+            var executor = new QueryExecutor(_context);
+
+            var user = await executor.ExecuteAsync(getUserQuery, new ProjectUser());
 
             return user == null
                 ? new NotFoundResult() as ActionResult
