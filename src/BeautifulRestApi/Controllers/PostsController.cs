@@ -21,19 +21,29 @@ namespace BeautifulRestApi.Controllers
             _defaultPagingOptions = defaultPagingOptions.Value;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Get(PagedCollectionParameters parameters)
-        //{
-        //    var getAllQuery = new GetAllPosts(_context, _defaultPagingOptions, Endpoint);
-        //    var results = await getAllQuery.Execute(parameters);
+        public async Task<IActionResult> Get(PagedCollectionParameters parameters)
+        {
+            var executor = new QueryExecutor(_context);
+            var results = await executor.ExecuteAsync(
+                new GetAllPosts(),
+                new ProjectToPagedCollection<DbModels.DbPost, Post>()
+                {
+                    Meta = PlaceholderLink.ToCollection(Endpoint),
+                    DefaultPagingParameters = _defaultPagingOptions,
+                    PagingParameters = parameters
+                },
+                new AddForms<PagedCollection<Post>>
+                {
+                    Forms = new[]
+                    {
+                        Form.FromModel<PostCreateModel>(Endpoint, "POST", "create-form")
+                    }
 
-        //    // Attach form definitions for discoverability
-        //    results.Forms = new[] { Form.FromModel<PostCreateModel>(Endpoint, "POST", "create-form") };
+                });
 
-        //    return new ObjectResult(results);
-        //}
+            return new ObjectResult(results);
+        }
 
-        [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> Get(string id)
         {
@@ -48,6 +58,7 @@ namespace BeautifulRestApi.Controllers
                 : new ObjectResult(post);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] PostCreateModel model)
         {
             if (!ModelState.IsValid)

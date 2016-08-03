@@ -32,5 +32,20 @@ namespace BeautifulRestApi.Queries
 
             return await transformation.ExecuteAsync(queryResults, cancellationToken);
         }
+
+        public async Task<TTransformed2> ExecuteAsync<TResult, TTransformed1, TTransformed2>(
+            IQuery<TResult> query,
+            ITransformation<TResult, TTransformed1> transformation1,
+            ITransformation<TTransformed1, TTransformed2> transformation2,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var queryResults = await ExecuteAsync(query, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return await transformation2.ExecuteAsync(
+                await transformation1.ExecuteAsync(queryResults, cancellationToken),
+                cancellationToken);
+        }
     }
 }

@@ -21,7 +21,6 @@ namespace BeautifulRestApi.Controllers
             _defaultPagingOptions = defaultPagingOptions.Value;
         }
 
-        [HttpGet]
         public async Task<IActionResult> Get(PagedCollectionParameters parameters)
         {
             var executor = new QueryExecutor(_context);
@@ -32,15 +31,19 @@ namespace BeautifulRestApi.Controllers
                     Meta = PlaceholderLink.ToCollection(Endpoint),
                     DefaultPagingParameters = _defaultPagingOptions,
                     PagingParameters = parameters
-                });
+                },
+                new AddForms<PagedCollection<User>>
+                {
+                    Forms = new[]
+                    {
+                        Form.FromModel<UserCreateModel>(Endpoint, "POST", "create-form")
+                    }
 
-            // Attach form definitions for discoverability
-            results.Forms = new[] { Form.FromModel<UserCreateModel>(Endpoint, "POST", "create-form") };
+                });
 
             return new ObjectResult(results);
         }
 
-        [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> Get(string id)
         {
@@ -54,7 +57,6 @@ namespace BeautifulRestApi.Controllers
                 : new ObjectResult(user);
         }
 
-        [HttpGet]
         [Route("{id}/posts")]
         public async Task<IActionResult> GetPosts(string id, PagedCollectionParameters parameters)
         {
