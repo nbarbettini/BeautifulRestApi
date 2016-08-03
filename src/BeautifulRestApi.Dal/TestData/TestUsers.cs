@@ -29,7 +29,7 @@ namespace BeautifulRestApi.Dal.TestData
             while (true)
             {
                 yield return new User {
-                    Id = IdGenerator.GetId(),
+                    Id = IdGenerator.NewId(),
                     FirstName = GivenNames[random.Next(GivenNames.Length - 1)],
                     LastName = Surnames[random.Next(Surnames.Length - 1)],
                     BirthDate = new DateTimeOffset(

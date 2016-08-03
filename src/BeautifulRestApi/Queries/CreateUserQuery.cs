@@ -19,7 +19,7 @@ namespace BeautifulRestApi.Queries
         {
             var entry = _context.Users.Add(new Dal.DbModels.User
             {
-                Id = Dal.IdGenerator.GetId(),
+                Id = Dal.IdGenerator.NewId(),
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 BirthDate = model.BirthDate

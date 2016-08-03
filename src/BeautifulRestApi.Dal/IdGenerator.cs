@@ -4,6 +4,6 @@ namespace BeautifulRestApi.Dal
 {
     public static class IdGenerator
     {
-        public static string GetId() => Guid.NewGuid().ToString().Replace("-", string.Empty);
+        public static string NewId() => Guid.NewGuid().ToString().Replace("-", string.Empty);
     }
 }

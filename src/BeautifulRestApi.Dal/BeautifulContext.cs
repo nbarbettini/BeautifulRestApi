@@ -15,3 +15,6 @@ namespace BeautifulRestApi.Dal
         public DbSet<Post> Posts { get; set; }
     }
 }
+
+todo
+//just move this all to the main project

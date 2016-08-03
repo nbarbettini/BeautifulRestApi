@@ -20,7 +20,7 @@ namespace BeautifulRestApi.Dal.TestData
             {
                 yield return new Post
                 {
-                    Id = IdGenerator.GetId(),
+                    Id = IdGenerator.NewId(),
                     UserId = userIds[random.Next(0, userIds.Count - 1)],
                     Content = LoremNET.Lorem.Sentence(random.Next(15)),
                     CreatedAt = new DateTimeOffset(
