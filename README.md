@@ -1,2 +1,5 @@
-# beautiful-rest-api-aspnetcore
-An example of beautiful REST API design with ASP.NET Core
+# A beautiful RESTful API in ASP.NET Core
+
+Original talk: [Building Beautiful REST APIs in ASP.NET Core](http://www.slideshare.net/NateBarbettini/building-beautiful-rest-apis-in-aspnet-core)
+
+This repository is currently a work-in-progress. Feel free to poke around! Let me know if you think anything could be improved.
