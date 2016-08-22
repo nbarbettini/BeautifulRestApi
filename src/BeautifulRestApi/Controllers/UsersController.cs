@@ -52,9 +52,11 @@ namespace BeautifulRestApi.Controllers
 
             var user = await executor.ExecuteAsync(getUserQuery, new ProjectUser());
 
-            return user == null
-                ? new NotFoundResult() as ActionResult
-                : new ObjectResult(user);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
         }
 
         [Route("{id}/posts")]
