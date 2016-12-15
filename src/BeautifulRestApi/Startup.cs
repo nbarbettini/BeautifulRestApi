@@ -27,11 +27,13 @@ namespace BeautifulRestApi
 
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Use an in-memory database for quick development and testing
             services.AddDbContext<BeautifulContext>(opt => opt.UseInMemoryDatabase());
 
+            // Save the default paged collection parameters to the DI container
+            // so we can easily retrieve them in a controller
             services.AddSingleton(Options.Create(new PagedCollectionParameters
             {
                 Limit = 25,
@@ -48,22 +50,13 @@ namespace BeautifulRestApi
             TypeAdapterConfig.GlobalSettings.Scan(typeof(Startup).GetTypeInfo().Assembly);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            // Seed data store with test data
             var context = app.ApplicationServices.GetService<BeautifulContext>();
-            
-            var fakeUsers = new TestData.TestUsers(26);
-            var fakePosts = new TestData.TestPosts(100, fakeUsers.Data.Select(x => x.Id).ToArray());
-
-            fakeUsers.Seed(context.Users);
-            fakePosts.Seed(context.Posts);
-
-            context.SaveChanges();
+            SeedContextWithTestData(context);
 
             app.UseMvc(opt =>
             {
@@ -71,6 +64,15 @@ namespace BeautifulRestApi
             });
         }
 
+        private static void SeedContextWithTestData(BeautifulContext context)
+        {
+            var fakeUsers = new TestData.TestUsers(26);
+            var fakePosts = new TestData.TestPosts(100, fakeUsers.Data.Select(x => x.Id).ToArray());
 
+            fakeUsers.Seed(context.Users);
+            fakePosts.Seed(context.Posts);
+
+            context.SaveChanges();
+        }
     }
 }
