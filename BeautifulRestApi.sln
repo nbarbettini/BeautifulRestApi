@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BeautifulRestApi", "src\BeautifulRestApi\BeautifulRestApi.xproj", "{70E97ED8-6E08-435F-BEED-F31E77BA744E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{15B2CF2A-90B4-4D72-8A31-5A7C2D5355CE}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BeautifulRestApi.Tests", "test\BeautifulRestApi.Tests\BeautifulRestApi.Tests.xproj", "{BA5DC0EA-F1B4-45AE-9A84-7093CB185B00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,11 +26,16 @@ Global
 		{70E97ED8-6E08-435F-BEED-F31E77BA744E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70E97ED8-6E08-435F-BEED-F31E77BA744E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70E97ED8-6E08-435F-BEED-F31E77BA744E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA5DC0EA-F1B4-45AE-9A84-7093CB185B00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA5DC0EA-F1B4-45AE-9A84-7093CB185B00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA5DC0EA-F1B4-45AE-9A84-7093CB185B00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA5DC0EA-F1B4-45AE-9A84-7093CB185B00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{70E97ED8-6E08-435F-BEED-F31E77BA744E} = {105A2212-B579-4597-81B9-E26F2243966E}
+		{BA5DC0EA-F1B4-45AE-9A84-7093CB185B00} = {15B2CF2A-90B4-4D72-8A31-5A7C2D5355CE}
 	EndGlobalSection
 EndGlobal
