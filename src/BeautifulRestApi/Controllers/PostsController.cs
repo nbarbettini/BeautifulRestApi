@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BeautifulRestApi.Models;
 using BeautifulRestApi.Queries;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -14,17 +15,22 @@ namespace BeautifulRestApi.Controllers
 
         private readonly BeautifulContext _context;
         private readonly PagedCollectionParameters _defaultPagingOptions;
+        private readonly TypeAdapterConfig _typeAdapterConfig;
 
-        public PostsController(BeautifulContext context, IOptions<PagedCollectionParameters> defaultPagingOptions)
+        public PostsController(
+            BeautifulContext context,
+            IOptions<PagedCollectionParameters> defaultPagingOptions,
+            TypeAdapterConfig typeAdapterConfig)
         {
             _context = context;
             _defaultPagingOptions = defaultPagingOptions.Value;
+            _typeAdapterConfig = typeAdapterConfig;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(PagedCollectionParameters parameters)
         {
-            var getAllQuery = new GetAllPostsQuery(_context, _defaultPagingOptions, Endpoint);
+            var getAllQuery = new GetAllPostsQuery(_context, _defaultPagingOptions, _typeAdapterConfig, Endpoint);
             var results = await getAllQuery.Execute(parameters);
 
             // Attach form definitions for discoverability
@@ -37,7 +43,7 @@ namespace BeautifulRestApi.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var query = new GetPostQuery(_context);
+            var query = new GetPostQuery(_context, _typeAdapterConfig);
             var post = await query.Execute(id);
 
             return post == null
@@ -56,7 +62,7 @@ namespace BeautifulRestApi.Controllers
                 });
             }
 
-            var createQuery = new CreatePostQuery(_context);
+            var createQuery = new CreatePostQuery(_context, _typeAdapterConfig);
             var post = await createQuery.Execute(model);
 
             return new CreatedAtRouteResult("default", new { controller = Endpoint, id = post.Item1 }, post.Item2);

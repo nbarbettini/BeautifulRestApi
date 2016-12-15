@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BeautifulRestApi.Models;
 using BeautifulRestApi.Queries;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -14,17 +15,22 @@ namespace BeautifulRestApi.Controllers
 
         private readonly BeautifulContext _context;
         private readonly PagedCollectionParameters _defaultPagingOptions;
+        private readonly TypeAdapterConfig _typeAdapterConfig;
 
-        public UsersController(BeautifulContext context, IOptions<PagedCollectionParameters> defaultPagingOptions)
+        public UsersController(
+            BeautifulContext context,
+            IOptions<PagedCollectionParameters> defaultPagingOptions,
+            TypeAdapterConfig typeAdapterConfig)
         {
             _context = context;
             _defaultPagingOptions = defaultPagingOptions.Value;
+            _typeAdapterConfig = typeAdapterConfig;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(PagedCollectionParameters parameters)
         {
-            var getAllQuery = new GetAllUsersQuery(_context, _defaultPagingOptions, Endpoint);
+            var getAllQuery = new GetAllUsersQuery(_context, _defaultPagingOptions, _typeAdapterConfig, Endpoint);
             var results = await getAllQuery.Execute(parameters);
 
             // Attach form definitions for discoverability
@@ -37,7 +43,7 @@ namespace BeautifulRestApi.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var getQuery = new GetUserQuery(_context);
+            var getQuery = new GetUserQuery(_context, _typeAdapterConfig);
             var user = await getQuery.Execute(id);
 
             return user == null
@@ -49,7 +55,7 @@ namespace BeautifulRestApi.Controllers
         [Route("{id}/posts")]
         public async Task<IActionResult> GetPosts(string id, PagedCollectionParameters parameters)
         {
-            var query = new GetPostsByUserQuery(_context, _defaultPagingOptions, Endpoint);
+            var query = new GetPostsByUserQuery(_context, _defaultPagingOptions, _typeAdapterConfig, Endpoint);
             var posts = await query.Execute(id, parameters);
 
             return posts == null
@@ -69,7 +75,7 @@ namespace BeautifulRestApi.Controllers
                 });
             }
 
-            var createQuery = new CreateUserQuery(_context);
+            var createQuery = new CreateUserQuery(_context, _typeAdapterConfig);
             var user = await createQuery.Execute(model);
 
             return new CreatedAtRouteResult("default", new { controller = Endpoint, id = user.Item1}, user.Item2);

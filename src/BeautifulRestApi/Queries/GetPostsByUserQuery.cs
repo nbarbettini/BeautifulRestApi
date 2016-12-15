@@ -11,12 +11,18 @@ namespace BeautifulRestApi.Queries
     {
         private readonly BeautifulContext _context;
         private readonly PagedCollectionParameters _defaultPagingParameters;
+        private readonly TypeAdapterConfig _typeAdapterConfig;
         private readonly string _endpoint;
 
-        public GetPostsByUserQuery(BeautifulContext context, PagedCollectionParameters defaultPagingParameters, string endpoint)
+        public GetPostsByUserQuery(
+            BeautifulContext context,
+            PagedCollectionParameters defaultPagingParameters,
+            TypeAdapterConfig typeAdapterConfig,
+            string endpoint)
         {
             _context = context;
             _defaultPagingParameters = defaultPagingParameters;
+            _typeAdapterConfig = typeAdapterConfig;
             _endpoint = endpoint;
 
         }
@@ -37,7 +43,7 @@ namespace BeautifulRestApi.Queries
 
             var query = _context.Posts
                 .Where(o => o.UserId == userId)
-                .ProjectToType<Post>();
+                .ProjectToType<Post>(_typeAdapterConfig);
 
             return await collectionFactory.CreateFrom(
                 query,

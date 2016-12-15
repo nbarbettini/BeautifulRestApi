@@ -9,10 +9,12 @@ namespace BeautifulRestApi.Queries
     public class CreateUserQuery
     {
         private readonly BeautifulContext _context;
+        private readonly TypeAdapterConfig _typeAdapterConfig;
 
-        public CreateUserQuery(BeautifulContext context)
+        public CreateUserQuery(BeautifulContext context, TypeAdapterConfig typeAdapterConfig)
         {
             _context = context;
+            _typeAdapterConfig = typeAdapterConfig;
         }
 
         public async Task<Tuple<string, User>> Execute(UserCreateModel model)
@@ -28,7 +30,7 @@ namespace BeautifulRestApi.Queries
 
             return new Tuple<string, User>(
                 entry.Entity.Id,
-                entry.Entity.Adapt<User>());
+                entry.Entity.Adapt<User>(_typeAdapterConfig));
         }
     }
 }

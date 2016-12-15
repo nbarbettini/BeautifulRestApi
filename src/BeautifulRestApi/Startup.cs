@@ -47,7 +47,9 @@ namespace BeautifulRestApi
             });
 
             // Add POCO mapping configurations
-            TypeAdapterConfig.GlobalSettings.Scan(typeof(Startup).GetTypeInfo().Assembly);
+            var typeAdapterConfig = new TypeAdapterConfig();
+            typeAdapterConfig.Scan(typeof(Startup).GetTypeInfo().Assembly);
+            services.AddSingleton(typeAdapterConfig);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
