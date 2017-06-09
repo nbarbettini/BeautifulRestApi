@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json.Linq;
@@ -24,18 +23,29 @@ namespace BeautifulRestApi.Tests
         public async Task ReturnCollection()
         {
             var response = await _client.GetAsync("/users");
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            dynamic data = JObject.Parse(await response.Content.ReadAsStringAsync());
-            Assert.True(data.items.Count > 0);
+            dynamic collection = JObject.Parse(await response.Content.ReadAsStringAsync());
+            Assert.True(collection.value.Count > 0);
         }
 
         [Fact]
         public async Task ReturnNotFoundForUnknownId()
         {
-            var response = await _client.GetAsync("/users/100abc");
+            var response = await _client.GetAsync("/users/100");
 
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task ReturnUser()
+        {
+            var response = await _client.GetAsync("/users/17");
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            dynamic user = JObject.Parse(await response.Content.ReadAsStringAsync());
+            Assert.Equal("Luke", user.firstName);
+            Assert.Equal("Skywalker", user.lastName);
         }
     }
 }
