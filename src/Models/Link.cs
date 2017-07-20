@@ -53,7 +53,7 @@ namespace BeautifulRestApi.Models
         /// </summary>
         /// <value>The method used when following the link.</value>
         [JsonProperty(Order = -3, NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        [DefaultValue("GET")]
+        [DefaultValue(GetMethod)]
         public string Method { get; set; }
 
         /// <summary>

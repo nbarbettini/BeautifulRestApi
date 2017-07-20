@@ -1,26 +1,29 @@
 # Beautiful REST API design with ASP.NET Core and ION
 
-Hello! :wave: This repository contains an example API written in C# and ASP.NET Core 1.1. It uses the [ION specification](http://ionwg.org/) as a starting point to model a consistent, clean REST API that embraces HATEOAS. I refer to this example in my conference talk [Building Beautiful REST APIs in ASP.NET Core](https://speakerdeck.com/nbarbettini/building-beautiful-rest-apis-in-asp-dot-net-core).
+Hello! :wave: This repository contains an example API written in C# and ASP.NET Core 1.1. It uses the [ION specification](https://ionwg.org/) as a starting point to model a consistent, clean REST API that embraces HATEOAS. I use this example in my talk [Building Beautiful REST APIs with ASP.NET Core](https://speakerdeck.com/nbarbettini/building-beautiful-rest-apis-in-asp-dot-net-core).
 
-## :tada: Deep dive course (new!)
+## Deep dive video course (new! :tada:)
  If want a **four-hour** deep dive on REST, HATEOAS, ION, API security, ASP.NET Core, and much more, check out my course [Building and Securing RESTful APIs in ASP.NET Core](https://www.lynda.com/ASP-NET-tutorials/Building-Securing-RESTful-API-Multiple-Clients-ASP-NET-Core/590839-2.html) on Lynda.
  
- It covers everything in this example repository and a lot more. (If you don't have a Lynda subscription, send me an e-mail and I can send you a coupon!)
+ It covers everything in this example repository and a lot more. (If you don't have a Lynda subscription, send me an e-mail and I'll get you a coupon!)
 
 ## Testing it out
 
-* Clone this repository
-* Build the solution using Visual Studio, or on the [command line](https://www.microsoft.com/net/core) with `dotnet build`.
-* Run the project. The API will start up on http://localhost:50647, or http://localhost:5000 with `dotnet run`.
-* Use an HTTP client like [Postman](https://www.getpostman.com/) or [Fiddler](https://www.telerik.com/download/fiddler) to `GET http://localhost:50647`.
+0. Clone this repository
+0. Build the solution using Visual Studio, or on the [command line](https://www.microsoft.com/net/core) with `dotnet build`.
+0. Run the project. The API will start up on http://localhost:50647, or http://localhost:5000 with `dotnet run`.
+0. Use an HTTP client like [Postman](https://www.getpostman.com/) or [Fiddler](https://www.telerik.com/download/fiddler) to `GET http://localhost:50647`.
+0. HATEOAS
+0. Profit! :moneybag:
 
-## Techniques for beautiful RESTful APIs in ASP.NET Core
+## Techniques for building RESTful APIs in ASP.NET Core
 
 This example contains a number of tricks and techniques I've learned while building APIs in ASP.NET Core. If you have any suggestions to make it even better, let me know!
 
 + [Entity Framework Core in-memory for rapid prototyping](#entity-framework-core-in-memory-for-rapid-prototyping)
 + [Model ION links, resources, and collections](#model-ion-links-resources-and-collections)
-+ [API controller pattern](#api-controller-pattern)
++ [Basic API controllers and routing](#basic-api-controllers-and-routing)
++ [Named routes pattern](#named-routes-pattern)
 + [Async/await best practices](#asyncawait-best-practices)
 + [Keep controllers lean](#keep-controllers-lean)
 + [Validate model binding with an ActionFilter](#validate-model-binding-with-an-actionfilter)
@@ -28,12 +31,13 @@ This example contains a number of tricks and techniques I've learned while build
 + [Serialize errors as JSON](#serialize-errors-as-json)
 + [Generate absolute URLs automatically with a filter](#generate-absolute-urls-automatically-with-a-filter)
 + [Map resources using AutoMapper](#map-resources-using-automapper)
-+ [Use application configuration in services](#use-application-configuration-in-services)
++ [Use strongly-typed route parameter classes](#use-strongly-typed-route-parameter-classes)
++ [Consume application configuration in services](#consume-application-configuration-in-services)
 + [Add paging to collections](#add-paging-to-collections)
 
 ### Entity Framework Core in-memory for rapid prototyping
 
-The [in-memory provider](https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/in-memory) in Entity Framework Core makes it easy to rapidly prototype without having to worry about setting up a database. You can build and test against a fast in-memory store, and then just swap it out for a real database when you're read.
+The [in-memory provider](https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/in-memory) in Entity Framework Core makes it easy to rapidly prototype without having to worry about setting up a database. You can build and test against a fast in-memory store, and then swap it out for a real database when you're ready.
 
 With the [Microsoft.EntityFrameworkCore.InMemory](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.InMemory) package installed, create a `DbContext`:
 
@@ -84,12 +88,52 @@ private static void AddTestData(ApiDbContext context)
 
 ### Model ION links, resources, and collections
 
-### API controller pattern
-
-API controllers in ASP.NET Core simply inherit from the `Controller` class, and use attributes to define routes. The common pattern is naming the controller `<RouteName>Controller`, and using the `/[controller]` attribute value, which automatically makes the controller name the route name:
+[ION](https://ionwg.org) provides a simple framework for describing REST objects in JSON. These ION objects can be modeled as POCOs in C#. Here's a Link object:
 
 ```csharp
-// Handles route: /comments
+public class Link
+{
+    public string Href { get; set; }
+
+    // Since ASP.NET Core uses JSON.NET by default, serialization can be
+    // fine-tuned with JSON.NET attributes
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore)]
+    [DefaultValue(GetMethod)]
+    public string Method { get; set; }
+
+    [JsonProperty(PropertyName = "rel", NullValueHandling = NullValueHandling.Ignore)]
+    public string[] Relations { get; set; }
+}
+```
+
+Modeling resources and collections is drop-dead simple:
+
+```csharp
+// Resources are also (self-referential) links
+public abstract class Resource : Link
+{
+    // Rewritten using LinkRewritingFilter during the response pipeline
+    [JsonIgnore]
+    public Link Self { get; set; }
+}
+
+// Collections are also resources
+public class Collection<T> : Resource
+{
+    public const string CollectionRelation = "collection";
+
+    public T[] Value { get; set; }
+}
+```
+
+These base classes make returning responses from the API nice and clean.
+
+### Basic API controllers and routing
+
+API controllers in ASP.NET Core inherit from the `Controller` class and use attributes to define routes. The common pattern is naming the controller `<RouteName>Controller`, and using the `/[controller]` attribute value, which automatically names the route based on the controller name:
+
+```csharp
+// Handles all routes under /comments
 [Route("/[controller]")]
 public class CommentsController : Controller
 {
@@ -97,11 +141,12 @@ public class CommentsController : Controller
 }
 ```
 
-Methods in the controller can handle HTTP verbs and sub-routes. Returning `IActionResult` gives you the flexibility to return both HTTP status codes and object payloads:
+Methods in the controller handle specific HTTP verbs and sub-routes. Returning `IActionResult` gives you the flexibility to return both HTTP status codes and object payloads:
 
 ```csharp
-// Handles route: GET /comments
-[HttpGet(Name = nameof(GetCommentsAsync))]
+// Handles route:
+// GET /comments
+[HttpGet]
 public async Task<IActionResult> GetCommentsAsync(CancellationToken ct)
 {
     return NotFound(); // 404
@@ -109,16 +154,29 @@ public async Task<IActionResult> GetCommentsAsync(CancellationToken ct)
     return Ok(data); // 200 with JSON payload
 }
 
-// Handles route: GET /comments/{commentId}
-// {commentId} is bound to the argument in the method signature
-[HttpGet("{commentId}", Name = nameof(GetCommentByIdAsync))]
+// Handles route:
+// GET /comments/{commentId}
+// and {commentId} is bound to the argument in the method signature
+[HttpGet("{commentId}"]
 public async Task<IActionResult> GetCommentByIdAsync(Guid commentId, CancellationToken ct)
 {
     // ...
 }
 ```
 
-I like using `nameof` to name the routes with the same descriptive name as the method itself. This makes it easy to refer to the route later in code.
+### Named routes pattern
+
+If you need to refer to specific routes later in code, you can use the `Name` property in the route attribute to provide a unique name. I like using `nameof` to name the routes with the same descriptive name as the method itself:
+
+```csharp
+[HttpGet(Name = nameof(GetCommentsAsync))]
+public async Task<IActionResult> GetCommentsAsync(CancellationToken ct)
+{
+    // ...
+}
+```
+
+This way, the compiler will make sure route names are always correct.
 
 ### Async/await best practices
 
@@ -128,24 +186,24 @@ Adding a `CancellationToken` parameter to your route methods allows ASP.NET Core
 
 ### Keep controllers lean
 
-I like keeping controllers as lean as possible by only concerning them with:
+I like keeping controllers as lean as possible, by only concerning them with:
 
 * Validating model binding (or not, see below!)
 * Checking for null, returning early
 * Orchestrating requests to services
 * Returning nice results
 
-Notice the lack of business logic! Keeping controllers lean makes them easier to test and maintain. Lean controllers fit well into more complex patterns like CQRS or Mediator, too.
+Notice the lack of business logic! Keeping controllers lean makes them easier to test and maintain. Lean controllers fit nicely into more complex patterns like CQRS or Mediator as well.
 
 ### Validate model binding with an ActionFilter
 
-Most route methods need to make sure the input values are valid before proceeding. This can be done in one line:
+Most routes need to make sure the input values are valid before proceeding. This can be done in one line:
 
 ```csharp
 if (!ModelState.IsValid) return BadRequest(ModelState);
 ```
 
-Instead of having this line at the top of every route, we can factor it out to [an ActionFilter](src/Infrastructure/ValidateModelAttribute.cs) which can be applied as an attribute:
+Instead of having this line at the top of every route method, you can factor it out to [an ActionFilter](src/Infrastructure/ValidateModelAttribute.cs) which can be applied as an attribute:
 
 ```csharp
 [HttpGet(Name = nameof(GetCommentsAsync))]
@@ -156,7 +214,7 @@ public async Task<IActionResult> GetCommentsAsync(...)
 The `ModelState` dictionary contains descriptive error messages (especially if the models are annotated with [validation attributes](https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation#validation-attributes)). You could return all of the errors to the user, or traverse the dictionary to pull out the first error:
 
 ```csharp
-var firstError = modelState
+var firstErrorIfAny = modelState
     .FirstOrDefault(x => x.Value.Errors.Any())
     .Value?.Errors?.FirstOrDefault()?.ErrorMessage
 ```
@@ -206,7 +264,7 @@ Passing `IHostingEnvironment` to the middleware makes it possible to send more d
 
 The `Controller` base class provides an easy way to generate protocol- and server-aware absolute URLs with `Url.Link()`. However, if you need to generate these links outside of a controller (such as in service code), you either need to pass around the `IUrlHelper` or find another way.
 
-In this project, the [`Link`](src/Models/Link.cs) class represents an absolute link to another resource or collection. The derived [`RouteLink`](src/Models/RouteLink.cs) class can stand in (temporarily) as a placeholder that contains just a route name, and then the [`LinkRewritingFilter`](src/Infrastructure/LinkRewritingFilter.cs) runs at the very end of the request pipeline and generates the absolute URL. (Filters have access to `IUrlHelper`, just like controllers do!)
+In this project, the [`Link`](src/Models/Link.cs) class represents an absolute link to another resource or collection. The derived [`RouteLink`](src/Models/RouteLink.cs) class can stand in (temporarily) as a placeholder that contains just a route name, and at the very end of the response pipeline the [`LinkRewritingFilter`](src/Infrastructure/LinkRewritingFilter.cs) enerates the absolute URL. (Filters have access to `IUrlHelper`, just like controllers do!)
 
 ### Map resources using AutoMapper
 
@@ -224,9 +282,57 @@ var items = await query // of CommentEntity
     .ToArrayAsync(ct); // of CommentResource
 ```
 
-### Use application configuration in services
+### Use strongly-typed route parameter classes
 
-ASP.NET Core has a powerful [configuration system](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) that you can use to provide dynamic configuration data to your API. You can define a group of properties in `appsettings.json`:
+If you look at the AutoMapper [mapping profile](src/Infrastructure/DefaultAutomapperProfile.cs) from above, you'll notice that strongly-typed route values are saved in each Link:
+
+```csharp
+Link.To(
+    nameof(ConversationsController.GetConversationByIdAsync),
+    new GetConversationByIdParameters { ConversationId = src.Id })
+```
+
+(You'll also notice a practical use of the [named routes pattern]()!)
+
+When the URL of the link is generated (later), the provided route values are matched up with the route method definition. The `RouteValues` property is just an `object`, so you could pass an anonymous object instead:
+
+```csharp
+Link.ToCollection(
+    nameof(ConversationsController.GetConversationByIdAsync),
+    new { conversationId = src.Id })
+```
+
+However, defining a [simple POCO](src/Controllers/GetConversationByIdParameters.cs) makes this type-safe and foolproof:
+
+```csharp
+public class GetConversationByIdParameters
+{
+    [FromRoute]
+    public Guid ConversationId { get; set; }
+}
+```
+
+Instead of defining the parameters directly in the method signature, like this:
+
+```csharp
+[HttpGet("{conversationId}", Name = nameof(GetConversationByIdAsync))]
+public async Task<IActionResult> GetConversationByIdAsync(
+    Guid conversationId,
+    CancellationToken ct)
+```
+
+The method signature contains the POCO itself:
+
+```csharp
+[HttpGet("{conversationId}", Name = nameof(GetConversationByIdAsync))]
+public async Task<IActionResult> GetConversationByIdAsync(
+    GetConversationByIdParameters parameters,
+    CancellationToken ct)
+```
+
+### Consume application configuration in services
+
+ASP.NET Core comes with a powerful [configuration system](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) that you can use to provide dynamic configuration data to your API. You can define a group of properties in `appsettings.json`:
 
 ```json
 "DefaultPagingOptions": {
@@ -235,13 +341,13 @@ ASP.NET Core has a powerful [configuration system](https://docs.microsoft.com/en
 }
 ```
 
-And then bind that group to a POCO in `ConfigureServices`:
+And bind that group to a POCO in `ConfigureServices`:
 
 ```csharp
 services.Configure<Models.PagingOptions>(Configuration.GetSection("DefaultPagingOptions"));
 ```
 
-This places the POCO in the services (DI) container as a singleton wrapped in `IOptions<>`, so it's available to controllers and services:
+This places the POCO in the services (DI) container as a singleton wrapped in `IOptions<>`, which can be injected in controllers and services:
 
 ```csharp
 private readonly PagingOptions _defaultPagingOptions;
@@ -270,13 +376,13 @@ Collections with more than a few dozen items start to become heavy to send over 
     "next": { "href": "http://api.foo.bar/comments?limit=25&offset=25", "rel": [ "collection" ] },
     "last": { "href": "http://api.foo.bar/comments?limit=25&offset=175", "rel": [ "collection"] },
     "value": [
-      // items...
+      "items..."
     ]
 }
 ```
 
 In this project, the [`CollectionWithPaging{T}` class](src/Models/CollectionWithPaging{T}.cs) handles the logic and math behind the scenes. Controllers that return collections accept a `[FromQuery] PagingOptions` parameter that binds to the `limit` and `offset` parameters needed for paging.
 
-You could also implement paging statefully (using a cursor) instead of statelessly (with limit/offset) by saving a cursor position in the database.
+Paging using a limit and offset is a stateless approach to paging. You could implement paging statefully (using a cursor) instead by saving a cursor position in the database.
 
 ### More to come...
