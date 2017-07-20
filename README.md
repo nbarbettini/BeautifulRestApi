@@ -2,12 +2,17 @@
 
 Hello! :wave: This repository contains an example API written in C# and ASP.NET Core 1.1. It uses the [ION specification](http://ionwg.org/) as a starting point to model a consistent, clean REST API that embraces HATEOAS. I refer to this example in my conference talk [Building Beautiful REST APIs in ASP.NET Core](https://speakerdeck.com/nbarbettini/building-beautiful-rest-apis-in-asp-dot-net-core).
 
-:tada: **New** :tada: If want a **four-hour deep dive** on REST, HATEOAS, ION, API security, ASP.NET Core, and much more, check out my course [Building and Securing RESTful APIs in ASP.NET Core](https://www.lynda.com/ASP-NET-tutorials/Building-Securing-RESTful-API-Multiple-Clients-ASP-NET-Core/590839-2.html). It covers everything in this example repository and more. (If you don't have a Lynda subscription, send me an e-mail and I can send you a coupon!)
+## :tada: Deep dive course (new!)
+ If want a **four-hour** deep dive on REST, HATEOAS, ION, API security, ASP.NET Core, and much more, check out my course [Building and Securing RESTful APIs in ASP.NET Core](https://www.lynda.com/ASP-NET-tutorials/Building-Securing-RESTful-API-Multiple-Clients-ASP-NET-Core/590839-2.html) on Lynda.
+ 
+ It covers everything in this example repository and a lot more. (If you don't have a Lynda subscription, send me an e-mail and I can send you a coupon!)
 
 ## Testing it out
 
-with postman
-switch between IIS Express and the console
+* Clone this repository
+* Build the solution using Visual Studio, or on the [command line](https://www.microsoft.com/net/core) with `dotnet build`.
+* Run the project. The API will start up on http://localhost:50647, or http://localhost:5000 with `dotnet run`.
+* Use an HTTP client like [Postman](https://www.getpostman.com/) or [Fiddler](https://www.telerik.com/download/fiddler) to `GET http://localhost:50647`.
 
 ## Techniques for beautiful RESTful APIs in ASP.NET Core
 
