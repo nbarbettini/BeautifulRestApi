@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using BeautifulRestApi.Infrastructure;
+using BeautifulRestApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using BeautifulRestApi.Models;
+using Newtonsoft.Json;
+using AutoMapper;
 
 namespace BeautifulRestApi
 {
@@ -36,7 +36,24 @@ namespace BeautifulRestApi
 
             services.AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddMvc();
+            services.AddMvc(opt =>
+            {
+
+                opt.Filters.Add(typeof(LinkRewritingFilter));
+            })
+            .AddJsonOptions(opt =>
+            {
+                // These should be the defaults, but we can be explicit:
+                opt.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+                opt.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                opt.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+            });
+
+            services.AddAutoMapper();
+
+            services.Configure<Models.PagingOptions>(Configuration.GetSection("DefaultPagingOptions"));
+
+            services.AddScoped<IConversationService, DefaultConversationService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -44,27 +61,34 @@ namespace BeautifulRestApi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            var context = app.ApplicationServices.GetRequiredService<ApiDbContext>();
-            AddTestData(context);
+            var dbContext = app.ApplicationServices.GetRequiredService<ApiDbContext>();
+            AddTestData(dbContext);
+
+            // Serialize all exceptions to JSON
+            var jsonExceptionMiddleware = new JsonExceptionMiddleware(
+                app.ApplicationServices.GetRequiredService<IHostingEnvironment>());
+            app.UseExceptionHandler(new ExceptionHandlerOptions { ExceptionHandler = jsonExceptionMiddleware.Invoke });
 
             app.UseMvc();
         }
 
         private static void AddTestData(ApiDbContext context)
         {
-            context.Users.Add(new DbUser()
+            context.Conversations.Add(new Models.ConversationEntity
             {
-                Id = 17,
-                FirstName = "Luke",
-                LastName = "Skywalker"
+                Id = Guid.Parse("6f1e369b-29ce-4d43-b027-3756f03899a1"),
+                CreatedAt = DateTimeOffset.UtcNow,
+                Title = "Spaces or tabs?"
             });
 
-            context.Users.Add(new DbUser()
+            context.Conversations.Add(new Models.ConversationEntity
             {
-                Id = 18,
-                FirstName = "Han",
-                LastName = "Solo"
+                Id = Guid.Parse("2d555f8f-e2a2-461e-b756-1f6d0d254b46"),
+                CreatedAt = DateTimeOffset.UtcNow,
+                Title = "Best programming language?"
             });
+
+            // TODO add comments
 
             context.SaveChanges();
         }
