@@ -73,7 +73,9 @@ namespace BeautifulRestApi.Controllers
             var conversationComments = await _commentService.GetCommentsAsync(parameters.ConversationId, pagingOptions, ct);
 
             var collection = CollectionWithPaging<CommentResource>.Create(
-                Link.ToCollection(nameof(GetConversationCommentsByIdAsync), new GetConversationByIdParameters { ConversationId = parameters.ConversationId }),
+                Link.ToCollection(
+                    nameof(GetConversationCommentsByIdAsync),
+                    new GetConversationByIdParameters { ConversationId = parameters.ConversationId }),
                 conversationComments.Items.ToArray(),
                 conversationComments.TotalSize,
                 pagingOptions);
