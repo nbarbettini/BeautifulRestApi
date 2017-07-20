@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BeautifulRestApi.Infrastructure;
 using BeautifulRestApi.Models;
 using BeautifulRestApi.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -24,12 +25,11 @@ namespace BeautifulRestApi.Controllers
         }
 
         [HttpGet(Name = nameof(GetCommentsAsync))]
+        [ValidateModel]
         public async Task<IActionResult> GetCommentsAsync(
             [FromQuery] PagingOptions pagingOptions,
             CancellationToken ct)
         {
-            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
-
             pagingOptions.Offset = pagingOptions.Offset ?? _defaultPagingOptions.Offset;
             pagingOptions.Limit = pagingOptions.Limit ?? _defaultPagingOptions.Limit;
 
@@ -45,6 +45,7 @@ namespace BeautifulRestApi.Controllers
         }
 
         [HttpGet("{commentId}", Name = nameof(GetCommentByIdAsync))]
+        [ValidateModel]
         public async Task<IActionResult> GetCommentByIdAsync(GetCommentByIdParameters parameters, CancellationToken ct)
         {
             if (parameters.CommentId == Guid.Empty) return NotFound();

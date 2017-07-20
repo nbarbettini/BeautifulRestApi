@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BeautifulRestApi.Infrastructure;
 using BeautifulRestApi.Models;
 using BeautifulRestApi.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -27,12 +28,11 @@ namespace BeautifulRestApi.Controllers
         }
 
         [HttpGet(Name = nameof(GetConversationsAsync))]
+        [ValidateModel]
         public async Task<IActionResult> GetConversationsAsync(
             [FromQuery] PagingOptions pagingOptions,
             CancellationToken ct)
         {
-            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
-
             pagingOptions.Offset = pagingOptions?.Offset ?? _defaultPagingOptions.Offset;
             pagingOptions.Limit = pagingOptions?.Limit ?? _defaultPagingOptions.Limit;
 
@@ -49,6 +49,7 @@ namespace BeautifulRestApi.Controllers
         }
 
         [HttpGet("{conversationId}", Name = nameof(GetConversationByIdAsync))]
+        [ValidateModel]
         public async Task<IActionResult> GetConversationByIdAsync(GetConversationByIdParameters parameters, CancellationToken ct)
         {
             if (parameters.ConversationId == Guid.Empty) return NotFound();
@@ -60,13 +61,12 @@ namespace BeautifulRestApi.Controllers
         }
 
         [HttpGet("{conversationId}/comments", Name = nameof(GetConversationCommentsByIdAsync))]
+        [ValidateModel]
         public async Task<IActionResult> GetConversationCommentsByIdAsync(
             GetConversationByIdParameters parameters,
             [FromQuery] PagingOptions pagingOptions,
             CancellationToken ct)
         {
-            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
-
             pagingOptions.Offset = pagingOptions?.Offset ?? _defaultPagingOptions.Offset;
             pagingOptions.Limit = pagingOptions?.Limit ?? _defaultPagingOptions.Limit;
 
