@@ -13,10 +13,10 @@ namespace BeautifulRestApi.Controllers
             {
                 Self = Link.To(nameof(GetRoot)),
                 Conversations = Link.ToCollection(nameof(ConversationsController.GetConversationsAsync)),
+                Comments = Link.ToCollection(nameof(CommentsController.GetCommentsAsync))
             };
 
             return Ok(response);
         }
     }
-
 }

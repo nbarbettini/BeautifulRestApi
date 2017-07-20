@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BeautifulRestApi.Controllers
 {
-    public class GetConversationByIdOptions
+    public class GetCommentByIdParameters
     {
         [FromRoute]
-        public Guid Id { get; set; }
+        public Guid CommentId { get; set; }
     }
 }

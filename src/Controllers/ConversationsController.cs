@@ -13,26 +13,28 @@ namespace BeautifulRestApi.Controllers
     public class ConversationsController : Controller
     {
         private readonly IConversationService _conversationService;
+        private readonly ICommentService _commentService;
         private readonly PagingOptions _defaultPagingOptions;
 
         public ConversationsController(
             IConversationService conversationService,
+            ICommentService commentService,
             IOptions<PagingOptions> defaultPagingOptionsAccessor)
         {
             _conversationService = conversationService;
+            _commentService = commentService;
             _defaultPagingOptions = defaultPagingOptionsAccessor.Value;
         }
 
         [HttpGet(Name = nameof(GetConversationsAsync))]
         public async Task<IActionResult> GetConversationsAsync(
             [FromQuery] PagingOptions pagingOptions,
-            // todo fromquery sort/search options
             CancellationToken ct)
         {
             if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
 
-            pagingOptions.Offset = pagingOptions.Offset ?? _defaultPagingOptions.Offset;
-            pagingOptions.Limit = pagingOptions.Limit ?? _defaultPagingOptions.Limit;
+            pagingOptions.Offset = pagingOptions?.Offset ?? _defaultPagingOptions.Offset;
+            pagingOptions.Limit = pagingOptions?.Limit ?? _defaultPagingOptions.Limit;
 
             var conversations = await _conversationService.GetConversationsAsync(
                 pagingOptions, ct);
@@ -46,15 +48,37 @@ namespace BeautifulRestApi.Controllers
             return Ok(collection);
         }
 
-        [HttpGet("{id}", Name = nameof(GetConversationByIdAsync))]
-        public async Task<IActionResult> GetConversationByIdAsync(GetConversationByIdOptions options, CancellationToken ct)
+        [HttpGet("{conversationId}", Name = nameof(GetConversationByIdAsync))]
+        public async Task<IActionResult> GetConversationByIdAsync(GetConversationByIdParameters parameters, CancellationToken ct)
         {
-            if (options.Id == Guid.Empty) return NotFound();
+            if (parameters.ConversationId == Guid.Empty) return NotFound();
 
-            var conversation = await _conversationService.GetConversationAsync(options.Id, ct);
+            var conversation = await _conversationService.GetConversationAsync(parameters.ConversationId, ct);
             if (conversation == null) return NotFound();
 
             return Ok(conversation);
+        }
+
+        [HttpGet("{conversationId}/comments", Name = nameof(GetConversationCommentsByIdAsync))]
+        public async Task<IActionResult> GetConversationCommentsByIdAsync(
+            GetConversationByIdParameters parameters,
+            [FromQuery] PagingOptions pagingOptions,
+            CancellationToken ct)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ApiError(ModelState));
+
+            pagingOptions.Offset = pagingOptions?.Offset ?? _defaultPagingOptions.Offset;
+            pagingOptions.Limit = pagingOptions?.Limit ?? _defaultPagingOptions.Limit;
+
+            var conversationComments = await _commentService.GetCommentsAsync(parameters.ConversationId, pagingOptions, ct);
+
+            var collection = CollectionWithPaging<CommentResource>.Create(
+                Link.ToCollection(nameof(GetConversationCommentsByIdAsync), new GetConversationByIdParameters { ConversationId = parameters.ConversationId }),
+                conversationComments.Items.ToArray(),
+                conversationComments.TotalSize,
+                pagingOptions);
+
+            return Ok(collection);
         }
     }
 }

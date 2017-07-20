@@ -10,5 +10,7 @@ namespace BeautifulRestApi.Models
         public string Title { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }
+
+        public Link Comments { get; set; }
     }
 }
