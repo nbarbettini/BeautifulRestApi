@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BeautifulRestApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautifulRestApi.Controllers
@@ -12,18 +9,14 @@ namespace BeautifulRestApi.Controllers
         [HttpGet(Name = nameof(GetRoot))]
         public IActionResult GetRoot()
         {
-            var response = new
+            var response = new RootResource
             {
-                href = Url.Link(nameof(GetRoot), null),
-                users = new
-                {
-                    href = Url.Link(nameof(UsersController.GetAllUsers), null),
-                    rel = new[] { "collection" }
-                }
+                Self = Link.To(nameof(GetRoot)),
+                Conversations = Link.ToCollection(nameof(ConversationsController.GetConversationsAsync)),
+                Comments = Link.ToCollection(nameof(CommentsController.GetCommentsAsync))
             };
 
             return Ok(response);
         }
     }
-
 }

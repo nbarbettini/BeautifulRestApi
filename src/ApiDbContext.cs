@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BeautifulRestApi.Models;
+﻿using BeautifulRestApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeautifulRestApi
@@ -14,7 +10,8 @@ namespace BeautifulRestApi
         {
         }
 
-        public DbSet<DbUser> Users { get; set; }
-    }
+        public DbSet<ConversationEntity> Conversations { get; set; }
 
+        public DbSet<CommentEntity> Comments { get; set; }
+    }
 }
