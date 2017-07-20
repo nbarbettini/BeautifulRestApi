@@ -13,6 +13,19 @@ switch between IIS Express and the console
 
 This example contains a number of tricks and techniques I've learned while building APIs in ASP.NET Core. If you have any suggestions to make it even better, let me know!
 
++ [Entity Framework Core in-memory for rapid prototyping](#entity-framework-core-in-memory-for-rapid-prototyping)
++ [Model ION links, resources, and collections](#model-ion-links-resources-and-collections)
++ [API controller pattern](#api-controller-pattern)
++ [Async/await best practices](#asyncawait-best-practices)
++ [Keep controllers lean](#keep-controllers-lean)
++ [Validate model binding with an ActionFilter](#validate-model-binding-with-an-actionfilter)
++ [Provide a root route](#provide-a-root-route)
++ [Serialize errors as JSON](#serialize-errors-as-json)
++ [Generate absolute URLs automatically with a filter](#generate-absolute-urls-automatically-with-a-filter)
++ [Map resources using AutoMapper](#map-resources-using-automapper)
++ [Use application configuration in services](#use-application-configuration-in-services)
++ [Add paging to collections](#add-paging-to-collections)
+
 ### Entity Framework Core in-memory for rapid prototyping
 
 The [in-memory provider](https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/in-memory) in Entity Framework Core makes it easy to rapidly prototype without having to worry about setting up a database. You can build and test against a fast in-memory store, and then just swap it out for a real database when you're read.
