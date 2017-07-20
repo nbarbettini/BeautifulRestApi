@@ -52,6 +52,8 @@ namespace BeautifulRestApi
 
             services.Configure<Models.PagingOptions>(Configuration.GetSection("DefaultPagingOptions"));
 
+            // Services that consume EF Core objects (DbContext) should be registered as Scoped
+            // (see https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection#registering-your-own-services)
             services.AddScoped<IConversationService, DefaultConversationService>();
             services.AddScoped<ICommentService, DefaultCommentService>();
         }
