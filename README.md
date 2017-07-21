@@ -292,12 +292,12 @@ Link.To(
     new GetConversationByIdParameters { ConversationId = src.Id })
 ```
 
-(You'll also notice a practical use of the [named routes pattern]()!)
+(You'll also notice a practical use of the [named routes pattern](#named-routes-pattern)!)
 
 When the URL of the link is generated (later), the provided route values are matched up with the route method definition. The `RouteValues` property is just an `object`, so you could pass an anonymous object instead:
 
 ```csharp
-Link.ToCollection(
+Link.To(
     nameof(ConversationsController.GetConversationByIdAsync),
     new { conversationId = src.Id })
 ```
