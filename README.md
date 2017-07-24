@@ -1,11 +1,11 @@
-# Beautiful REST API design with ASP.NET Core and ION
+# Beautiful REST API design with ASP.NET Core and Ion
 
-Hello! :wave: This repository contains an example API written in C# and ASP.NET Core 1.1. It uses the [ION specification](https://ionwg.org/) as a starting point to model a consistent, clean REST API that embraces HATEOAS. I use this example in my talk [Building Beautiful REST APIs with ASP.NET Core](https://speakerdeck.com/nbarbettini/building-beautiful-rest-apis-in-asp-dot-net-core).
+Hello! :wave: This repository contains an example API written in C# and ASP.NET Core 1.1. It uses the [Ion hypermedia specification](https://ionwg.org/) as a starting point to model a consistent, clean REST API that embraces HATEOAS. I use this example in my talk [Building Beautiful REST APIs with ASP.NET Core](https://speakerdeck.com/nbarbettini/building-beautiful-rest-apis-in-asp-dot-net-core).
 
 ## Deep dive video course (new! :tada:)
- If want a **four-hour** deep dive on REST, HATEOAS, ION, API security, ASP.NET Core, and much more, check out my course [Building and Securing RESTful APIs in ASP.NET Core](https://www.lynda.com/ASP-NET-tutorials/Building-Securing-RESTful-API-Multiple-Clients-ASP-NET-Core/590839-2.html) on Lynda.
+ If want a **four-hour** deep dive on REST, HATEOAS, Ion, API security, ASP.NET Core, and much more, check out my course [Building and Securing RESTful APIs in ASP.NET Core](https://www.lynda.com/ASP-NET-tutorials/Building-Securing-RESTful-API-Multiple-Clients-ASP-NET-Core/590839-2.html) on Lynda.
  
- It covers everything in this example repository and a lot more. (If you don't have a Lynda subscription, send me an e-mail and I'll get you a coupon!)
+ It covers everything in this example repository and a lot more. (If you don't have a Lynda subscription, send me an e-mail and I'll give you a coupon!)
 
 ## Testing it out
 
@@ -21,7 +21,7 @@ Hello! :wave: This repository contains an example API written in C# and ASP.NET 
 This example contains a number of tricks and techniques I've learned while building APIs in ASP.NET Core. If you have any suggestions to make it even better, let me know!
 
 + [Entity Framework Core in-memory for rapid prototyping](#entity-framework-core-in-memory-for-rapid-prototyping)
-+ [Model ION links, resources, and collections](#model-ion-links-resources-and-collections)
++ [Model Ion links, resources, and collections](#model-ion-links-resources-and-collections)
 + [Basic API controllers and routing](#basic-api-controllers-and-routing)
 + [Named routes pattern](#named-routes-pattern)
 + [Async/await best practices](#asyncawait-best-practices)
@@ -86,9 +86,9 @@ private static void AddTestData(ApiDbContext context)
 }
 ```
 
-### Model ION links, resources, and collections
+### Model Ion links, resources, and collections
 
-[ION](https://ionwg.org) provides a simple framework for describing REST objects in JSON. These ION objects can be modeled as POCOs in C#. Here's a Link object:
+[Ion](https://ionwg.org) provides a simple framework for describing REST objects in JSON. These Ion objects can be modeled as POCOs in C#. Here's a Link object:
 
 ```csharp
 public class Link
