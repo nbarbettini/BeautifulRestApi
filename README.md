@@ -3,7 +3,7 @@
 Hello! :wave: This repository contains an example API written in C# and ASP.NET Core 1.1. It uses the [Ion hypermedia specification](https://ionwg.org/) as a starting point to model a consistent, clean REST API that embraces HATEOAS. I use this example in my talk [Building Beautiful REST APIs with ASP.NET Core](https://speakerdeck.com/nbarbettini/building-beautiful-rest-apis-in-asp-dot-net-core).
 
 ## Deep dive video course (new! :tada:)
- If want a **four-hour** deep dive on REST, HATEOAS, Ion, API security, ASP.NET Core, and much more, check out my course [Building and Securing RESTful APIs in ASP.NET Core](https://www.lynda.com/ASP-NET-tutorials/Building-Securing-RESTful-API-Multiple-Clients-ASP-NET-Core/590839-2.html) on Lynda.
+ If you want a **four-hour** deep dive on REST, HATEOAS, Ion, API security, ASP.NET Core, and much more, check out my course [Building and Securing RESTful APIs in ASP.NET Core](https://www.lynda.com/ASP-NET-tutorials/Building-Securing-RESTful-API-Multiple-Clients-ASP-NET-Core/590839-2.html) on Lynda.
  
  It covers everything in this example repository and a lot more. (If you don't have a Lynda subscription, send me an e-mail and I'll give you a coupon!)
 
