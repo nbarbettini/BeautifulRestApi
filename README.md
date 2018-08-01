@@ -1,41 +1,46 @@
 # Beautiful REST API design with ASP.NET Core and Ion
 
-Hello! :wave: This repository contains an example API written in C# and ASP.NET Core 1.1. It uses the [Ion hypermedia specification](https://ionwg.org/) as a starting point to model a consistent, clean REST API that embraces HATEOAS.
+Hello! :wave: This repository contains an example API written in C# and ASP.NET Core 1.1. It uses the [Ion hypermedia specification][ion] as a starting point to model a consistent, clean REST API that embraces HATEOAS.
 
-I use this example in my talk [Building beautiful RESTful APIs with ASP.NET Core](https://speakerdeck.com/nbarbettini/building-beautiful-rest-apis-in-asp-dot-net-core) (slides available).
+I use this example in my talk [Building beautiful RESTful APIs with ASP.NET Core](https://speakerdeck.com/nbarbettini/building-beautiful-rest-apis-in-asp-dot-net-core) (follow the link to download the slides).
 
 ## Deep dive video course
- If you want a **four-hour** deep dive on REST, HATEOAS, Ion, API security, ASP.NET Core, and much more, check out my course [Building and Securing RESTful APIs in ASP.NET Core](https://www.lynda.com/ASP-NET-tutorials/Building-Securing-RESTful-API-Multiple-Clients-ASP-NET-Core/590839-2.html) on Lynda.
+ If you want a **four-hour** deep dive on REST, HATEOAS, Ion, API security, ASP.NET Core, and much more, check out my course [Building and Securing RESTful APIs in ASP.NET Core][lil-course] on LinkedIn Learning.
  
- It covers everything in this example repository and a lot more. (If you don't have a Lynda subscription, send me an e-mail and I'll give you a coupon!)
+ It covers everything in this example repository and a lot more. (If you don't have a LinkedIn Learning or Lynda subscription, send me an e-mail and I'll give you a coupon!)
 
 ## Testing it out
 
-0. Clone this repository
-0. Build the solution using Visual Studio, or on the [command line](https://www.microsoft.com/net/core) with `dotnet build`.
-0. Run the project. The API will start up on http://localhost:50647, or http://localhost:5000 with `dotnet run`.
-0. Use an HTTP client like [Postman](https://www.getpostman.com/) or [Fiddler](https://www.telerik.com/download/fiddler) to `GET http://localhost:50647`.
-0. HATEOAS
-0. Profit! :moneybag:
+1. Clone this repository
+2. Build the solution using Visual Studio, or on the [command line](https://www.microsoft.com/net/core) with `dotnet build`.
+3. Run the project. The API will start up on http://localhost:50647, or http://localhost:5000 with `dotnet run`.
+4. Use an HTTP client like [Postman](https://www.getpostman.com/) or [Fiddler](https://www.telerik.com/download/fiddler) to `GET http://localhost:50647`.
+5. HATEOAS
+6. Profit! :moneybag:
 
 ## Techniques for building RESTful APIs in ASP.NET Core
 
 This example contains a number of tricks and techniques I've learned while building APIs in ASP.NET Core. If you have any suggestions to make it even better, let me know!
 
-+ [Entity Framework Core in-memory for rapid prototyping](#entity-framework-core-in-memory-for-rapid-prototyping)
-+ [Model Ion links, resources, and collections](#model-ion-links-resources-and-collections)
-+ [Basic API controllers and routing](#basic-api-controllers-and-routing)
-+ [Named routes pattern](#named-routes-pattern)
-+ [Async/await best practices](#asyncawait-best-practices)
-+ [Keep controllers lean](#keep-controllers-lean)
-+ [Validate model binding with an ActionFilter](#validate-model-binding-with-an-actionfilter)
-+ [Provide a root route](#provide-a-root-route)
-+ [Serialize errors as JSON](#serialize-errors-as-json)
-+ [Generate absolute URLs automatically with a filter](#generate-absolute-urls-automatically-with-a-filter)
-+ [Map resources using AutoMapper](#map-resources-using-automapper)
-+ [Use strongly-typed route parameter classes](#use-strongly-typed-route-parameter-classes)
-+ [Consume application configuration in services](#consume-application-configuration-in-services)
-+ [Add paging to collections](#add-paging-to-collections)
+- [Beautiful REST API design with ASP.NET Core and Ion](#beautiful-rest-api-design-with-aspnet-core-and-ion)
+    - [Deep dive video course](#deep-dive-video-course)
+    - [Testing it out](#testing-it-out)
+    - [Techniques for building RESTful APIs in ASP.NET Core](#techniques-for-building-restful-apis-in-aspnet-core)
+        - [Entity Framework Core in-memory for rapid prototyping](#entity-framework-core-in-memory-for-rapid-prototyping)
+        - [Model Ion links, resources, and collections](#model-ion-links-resources-and-collections)
+        - [Basic API controllers and routing](#basic-api-controllers-and-routing)
+        - [Named routes pattern](#named-routes-pattern)
+        - [Async/await best practices](#asyncawait-best-practices)
+        - [Keep controllers lean](#keep-controllers-lean)
+        - [Validate model binding with an ActionFilter](#validate-model-binding-with-an-actionfilter)
+        - [Provide a root route](#provide-a-root-route)
+        - [Serialize errors as JSON](#serialize-errors-as-json)
+        - [Generate absolute URLs automatically with a filter](#generate-absolute-urls-automatically-with-a-filter)
+        - [Map resources using AutoMapper](#map-resources-using-automapper)
+        - [Use strongly-typed route parameter classes](#use-strongly-typed-route-parameter-classes)
+        - [Consume application configuration in services](#consume-application-configuration-in-services)
+        - [Add paging to collections](#add-paging-to-collections)
+        - [More to come...](#more-to-come)
 
 ### Entity Framework Core in-memory for rapid prototyping
 
@@ -90,7 +95,7 @@ private static void AddTestData(ApiDbContext context)
 
 ### Model Ion links, resources, and collections
 
-[Ion](https://ionwg.org) provides a simple framework for describing REST objects in JSON. These Ion objects can be modeled as POCOs in C#. Here's a Link object:
+[Ion][ion] provides a simple framework for describing REST objects in JSON. These Ion objects can be modeled as POCOs in C#. Here's a Link object:
 
 ```csharp
 public class Link
@@ -388,3 +393,6 @@ In this project, the [`CollectionWithPaging{T}` class](src/Models/CollectionWith
 Paging using a limit and offset is a stateless approach to paging. You could implement paging statefully (using a cursor) instead by saving a cursor position in the database.
 
 ### More to come...
+
+[lil-course]: https://www.linkedin.com/learning/building-and-securing-restful-apis-in-asp-dot-net-core?trk=insiders_243818268_learning
+[ion]: https://ionspec.org
