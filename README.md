@@ -1,5 +1,6 @@
 # Beautiful REST API design with ASP.NET Core and Ion
 
+
 Hello! :wave: This repository contains an example API written in C# and ASP.NET Core 1.1. It uses the [Ion hypermedia specification][ion] as a starting point to model a consistent, clean REST API that embraces HATEOAS.
 
 I use this example in my talk [Building beautiful RESTful APIs with ASP.NET Core](https://speakerdeck.com/nbarbettini/building-beautiful-rest-apis-in-asp-dot-net-core) (follow the link to download the slides).
