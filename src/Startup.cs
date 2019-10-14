@@ -36,17 +36,8 @@ namespace BeautifulRestApi
 
             services.AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddMvc(opt =>
-            {
-                opt.Filters.Add(typeof(LinkRewritingFilter));
-            })
-            .AddJsonOptions(opt =>
-            {
-                // These should be the defaults, but we can be explicit:
-                opt.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-                opt.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-                opt.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
-            });
+            services.AddMvc(opt => { opt.Filters.Add(typeof(LinkRewritingFilter)); })
+                .AddJsonOptions(opt => { });
 
             services.AddAutoMapper();
 
@@ -60,16 +51,13 @@ namespace BeautifulRestApi
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             var dbContext = app.ApplicationServices.GetRequiredService<ApiDbContext>();
             AddTestData(dbContext);
 
             // Serialize all exceptions to JSON
             var jsonExceptionMiddleware = new JsonExceptionMiddleware(
                 app.ApplicationServices.GetRequiredService<IHostingEnvironment>());
-            app.UseExceptionHandler(new ExceptionHandlerOptions { ExceptionHandler = jsonExceptionMiddleware.Invoke });
+            app.UseExceptionHandler(new ExceptionHandlerOptions {ExceptionHandler = jsonExceptionMiddleware.Invoke});
 
             app.UseMvc();
         }
