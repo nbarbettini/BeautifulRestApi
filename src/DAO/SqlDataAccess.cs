@@ -1,33 +1,36 @@
 using System.Data;
 using System.Data.SqlClient;
 
-namespace BeautifulRestApi.DAO
+
+namespace BeautifulRestApi.Dao
 {
     public class SqlDataAccess : IDatabaseHandler
     {
-        private string server;
-        private string database;
-        private string uid;
-        private string password;
+        public string Server { get; }
+        public string Database { get; }
+        public string Uid { get; }
+        public string Password { get; }
 
 
         public string ConnectionString { get; set; }
 
 
-        private IDbConnection Connection { get; set; }
+        public SqlConnection Connection { get; set; }
 
 
         public SqlDataAccess(string server, string database, string uid, string password)
         {
-            this.server = server;
-            this.database = database;
-            this.uid = uid;
-            this.password = password;
+            Server = server;
+            Database = database;
+            Uid = uid;
+            Password = password;
+            Connection = CreateConnection(server, database, uid, password);
         }
 
-        public IDbConnection CreateConnection()
+
+        public SqlConnection CreateConnection(string dataSource, string database, string uid, string password)
         {
-            ConnectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" +
+            ConnectionString = "SERVER=" + dataSource + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" +
                                "PASSWORD=" + password;
             Connection = new SqlConnection(ConnectionString);
 

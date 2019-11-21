@@ -396,3 +396,5 @@ Paging using a limit and offset is a stateless approach to paging. You could imp
 
 [lil-course]: https://www.linkedin.com/learning/building-and-securing-restful-apis-in-asp-dot-net-core?trk=insiders_243818268_learning
 [ion]: https://ionspec.org
+
+https://www.quackit.com/sql_server/mac/install_sql_server_on_a_mac.cfm

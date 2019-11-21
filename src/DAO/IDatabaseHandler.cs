@@ -1,10 +1,11 @@
 using System.Data;
+using System.Data.SqlClient;
 
-namespace BeautifulRestApi.DAO
+namespace BeautifulRestApi.Dao
 {
     public interface IDatabaseHandler
     {
-        IDbConnection CreateConnection();
+        SqlConnection CreateConnection(string dataSource, string initialCatalog, string userId, string userpassword);
 
         void CloseConnection();
 
