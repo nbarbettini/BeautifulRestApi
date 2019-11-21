@@ -24,7 +24,7 @@ namespace BeautifulRestApi.Test
             IDbConnection connection = sqlDataAccess.Connection;
             var dbConnection = connection;
 
-            var result = dbConnection.QuerySingle<User>("select [Guid],[Name],[Email] from dbo.[users]");
+            var result = dbConnection.Query<User>("select [guid],[name],[email] from dbo.[users]");
 
             Assert.NotNull(result);
         }
