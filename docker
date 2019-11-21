@@ -1,0 +1,8 @@
+sudo docker pull mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+
+sudo docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=myPassw0rd" \
+   -p 1433:1433 --name master \
+   -d mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+   
+   
+   
