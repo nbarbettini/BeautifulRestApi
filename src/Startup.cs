@@ -36,7 +36,11 @@ namespace BeautifulRestApi
 
             services.AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddMvc(opt => { opt.Filters.Add(typeof(LinkRewritingFilter)); })
+            services.AddMvc(opt =>
+                {
+                    opt.Filters.Add(typeof(LinkRewritingFilter));
+                    opt.EnableEndpointRouting = false;
+                })
                 .AddJsonOptions(opt => { });
 
             services.AddAutoMapper();
